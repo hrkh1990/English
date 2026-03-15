@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The CTO Chronicles</title>
+<style>
+:root {
+  --bg:#0f1117; --surface:#1a1d27; --card:#20243a; --border:#2e3251;
+  --text:#e8eaf6; --muted:#8b90a8; --dialogue-bg:#12172a;
+  --gen:#ffb347; --gen-dim:rgba(255,179,71,0.10); --gen-border:rgba(255,179,71,0.28);
+  --biz:#00d2a0; --biz-dim:rgba(0,210,160,0.08); --biz-border:rgba(0,210,160,0.28);
+  --accent:#6c63ff; --accent3:#ff6584; --star:#ffd700;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(15,17,23,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;height:54px;gap:4px;}
+.nav-logo{font-size:15px;font-weight:800;background:linear-gradient(90deg,#6c63ff,#00d2a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-right:14px;white-space:nowrap;}
+.nav-tab{display:flex;align-items:center;gap:6px;padding:6px 13px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:transparent;text-decoration:none;transition:all .15s;white-space:nowrap;}
+.nav-tab:hover{color:var(--text);background:var(--card);}
+.nav-tab.active{color:#fff;background:var(--accent);}
+.nav-tab.active.gen-tab{background:var(--gen);color:#1a1d27;}
+.nav-tab.active.biz-tab{background:var(--biz);color:#1a1d27;}
+.nav-tab.active.fc-tab{background:var(--accent3);color:#fff;}
+.nav-tab.active.saved-tab{background:var(--star);color:#1a1d27;}
+.nav-tab.active.gram-tab{background:linear-gradient(90deg,#6c63ff,#00d2a0);color:#fff;}
+.nav-tab.active.mine-tab{background:linear-gradient(90deg,#ff6584,#ffb347);color:#fff;}
+.nav-spacer{flex:1;}
+.nav-day-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:var(--card);border:1px solid var(--border);color:var(--muted);}
+
+/* PAGES */
+.page{display:none;padding-top:54px;}
+.page.active{display:block;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a1d27 0%,#12172a 60%,#1a1027 100%);border-bottom:1px solid var(--border);padding:44px 24px 32px;text-align:center;}
+.hero-badge{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:14px;}
+.hero h1{font-size:clamp(24px,5vw,44px);font-weight:800;background:linear-gradient(90deg,#6c63ff,#00d2a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;}
+.hero p{color:var(--muted);margin-top:9px;font-size:15px;max-width:520px;margin-inline:auto;}
+.hero-meta{display:flex;justify-content:center;gap:10px;margin-top:20px;flex-wrap:wrap;}
+.hero-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 16px;font-size:12px;color:var(--muted);text-align:center;}
+.hero-stat span{color:var(--accent);font-weight:700;font-size:18px;display:block;}
+
+/* HOME CARDS */
+.home-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:840px;margin:32px auto 0;padding:0 20px 60px;}
+.home-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px;cursor:pointer;transition:all .2s;text-decoration:none;display:block;}
+.home-card:hover{transform:translateY(-3px);}
+.home-card.gen-card:hover{border-color:var(--gen);}
+.home-card.biz-card:hover{border-color:var(--biz);}
+.home-card.fc-card:hover{border-color:var(--accent3);}
+.home-card.saved-card:hover{border-color:var(--star);}
+.hc-icon{font-size:30px;margin-bottom:10px;}
+.hc-title{font-size:15px;font-weight:700;margin-bottom:5px;}
+.hc-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+.hc-count{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.gen-card .hc-count{background:var(--gen-dim);color:var(--gen);border:1px solid var(--gen-border);}
+.biz-card .hc-count{background:var(--biz-dim);color:var(--biz);border:1px solid var(--biz-border);}
+.fc-card .hc-count{background:rgba(255,101,132,.1);color:var(--accent3);border:1px solid rgba(255,101,132,.3);}
+.saved-card .hc-count{background:rgba(255,215,0,.1);color:var(--star);border:1px solid rgba(255,215,0,.3);}
+
+/* FILTER BAR */
+.filter-bar{position:sticky;top:54px;z-index:100;background:rgba(15,17,23,0.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.filter-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.filter-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.filter-sep{width:1px;height:20px;background:var(--border);}
+.fbtn{font-size:11px;font-weight:600;padding:4px 11px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.fbtn:hover{border-color:var(--accent);color:var(--text);}
+.fbtn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.filter-search{margin-left:auto;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:12px;color:var(--text);outline:none;width:150px;}
+.filter-search::placeholder{color:var(--muted);}
+.filter-search:focus{border-color:var(--accent);}
+
+/* CONTAINER */
+.container{max-width:860px;margin:0 auto;padding:28px 20px 80px;}
+
+/* DAY CARD */
+.day-card{background:var(--surface);border:1px solid var(--border);border-radius:22px;margin-bottom:36px;overflow:hidden;transition:opacity .2s;}
+.day-card.hidden{display:none;}
+.day-header{background:linear-gradient(90deg,#1a1d27,#12172a);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;}
+.day-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:3px;}
+.day-title{font-size:20px;font-weight:800;}
+.day-meta{display:flex;gap:7px;margin-top:7px;flex-wrap:wrap;align-items:center;}
+.day-level{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.day-level.b1{background:rgba(108,99,255,.12);color:#9c94ff;border:1px solid rgba(108,99,255,.25);}
+.day-level.b1-b2{background:rgba(255,179,71,.12);color:#ffb347;border:1px solid rgba(255,179,71,.25);}
+.day-level.b2{background:rgba(255,179,71,.15);color:#ffb347;border:1px solid rgba(255,179,71,.30);}
+.day-level.c1{background:rgba(255,101,132,.12);color:#ff6584;border:1px solid rgba(255,101,132,.25);}
+.topic-tag{display:inline-block;font-size:10px;font-weight:600;padding:3px 9px;border-radius:10px;background:var(--card);border:1px solid var(--border);color:var(--muted);}
+.day-date{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 13px;font-size:12px;color:var(--muted);white-space:nowrap;align-self:flex-start;}
+
+/* SECTION */
+.section-solo{padding:24px;}
+.section-pill{display:inline-flex;align-items:center;gap:7px;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:18px;}
+.section-pill.gen{background:var(--gen-dim);border:1px solid var(--gen-border);color:var(--gen);}
+.section-pill.biz{background:var(--biz-dim);border:1px solid var(--biz-border);color:var(--biz);}
+
+/* BLOCK TITLE */
+.block-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;margin-top:18px;display:flex;align-items:center;gap:8px;}
+.block-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ICE BREAKER */
+.ice-breaker{border-radius:12px;padding:12px 16px;}
+.ice-breaker.gen{background:var(--gen-dim);border:1px solid var(--gen-border);}
+.ice-breaker.biz{background:var(--biz-dim);border:1px solid var(--biz-border);}
+.ice-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;opacity:.7;}
+.ice-question{font-size:15px;font-weight:600;color:var(--text);}
+.ice-tip{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* DIALOGUE */
+.dialogue-box{background:var(--dialogue-bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.dialogue-header{padding:7px 15px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
+.dialogue-header.gen{background:var(--gen-dim);color:var(--gen);}
+.dialogue-header.biz{background:var(--biz-dim);color:var(--biz);}
+.dialogue-lines{padding:12px 15px;display:flex;flex-direction:column;gap:11px;}
+.line{display:flex;gap:11px;align-items:flex-start;}
+.spk{min-width:60px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding-top:3px;}
+.spk.s1{color:var(--accent3);}
+.spk.s2{color:var(--accent);}
+.spk.s3{color:var(--gen);}
+.spk.s4{color:var(--biz);}
+.line-text{font-size:14px;line-height:1.65;color:var(--text);flex:1;}
+.hl{background:rgba(108,99,255,.18);color:#c0b8ff;border-radius:4px;padding:1px 5px;font-weight:600;}
+.hl-g{background:rgba(255,179,71,.15);color:var(--gen);border-radius:4px;padding:1px 5px;font-weight:600;}
+.hl-b{background:rgba(0,210,160,.13);color:var(--biz);border-radius:4px;padding:1px 5px;font-weight:600;}
+
+/* ITEM CARDS */
+.item-list{display:flex;flex-direction:column;gap:8px;}
+.item-card{border-radius:10px;padding:10px 13px;background:var(--card);border:1px solid var(--border);position:relative;transition:box-shadow .15s;}
+.item-card.gen{border-left:3px solid var(--gen);}
+.item-card.biz{border-left:3px solid var(--biz);}
+.item-phrase{font-size:14px;font-weight:700;margin-bottom:3px;padding-right:30px;}
+.item-phrase.gen{color:var(--gen);}
+.item-phrase.biz{color:var(--biz);}
+.item-meaning{font-size:12px;color:var(--muted);margin-bottom:4px;}
+.item-example{font-size:12px;color:var(--text);font-style:italic;}
+
+/* STAR BUTTON on cards */
+.star-btn{position:absolute;top:9px;right:10px;background:none;border:none;cursor:pointer;font-size:16px;opacity:.3;transition:opacity .15s,transform .15s;line-height:1;}
+.star-btn:hover{opacity:.8;transform:scale(1.2);}
+.star-btn.starred{opacity:1;filter:drop-shadow(0 0 4px rgba(255,215,0,.6));}
+/* PRONOUNCE BUTTON — inline with phrase */
+.pronounce-btn{display:inline-flex;align-items:center;gap:4px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.25);border-radius:6px;color:#9c94ff;cursor:pointer;font-size:11px;font-weight:600;padding:2px 7px;margin-left:6px;vertical-align:middle;transition:all .15s;line-height:1.4;}
+.pronounce-btn:hover{background:rgba(108,99,255,.22);border-color:rgba(108,99,255,.5);color:#c0b8ff;}
+.pronounce-btn.loading{animation:pulse 1s infinite;}
+
+/* GRIDS */
+.colloc-grid,.vocab-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:860px){.colloc-grid,.vocab-grid{grid-template-columns:1fr;}}
+
+/* GRAMMAR */
+.grammar-box{border-radius:12px;padding:14px;background:var(--card);position:relative;}
+.grammar-box.gen{border:1px solid var(--gen-border);}
+.grammar-box.biz{border:1px solid var(--biz-border);}
+.grammar-rule{font-size:15px;font-weight:700;margin-bottom:7px;}
+.grammar-rule.gen{color:var(--gen);}
+.grammar-rule.biz{color:var(--biz);}
+.grammar-body{font-size:13px;color:var(--muted);line-height:1.6;}
+.grammar-ex{margin-top:9px;display:flex;flex-direction:column;gap:4px;}
+.grammar-ex .wrong{color:var(--accent3);font-size:13px;}
+.grammar-ex .right{color:var(--biz);font-size:13px;}
+
+/* NICE POINTS */
+.nice-box{border-radius:10px;padding:12px;background:var(--card);border:1px solid var(--border);}
+.nice-item{font-size:13px;color:var(--text);line-height:1.6;padding:5px 0;border-bottom:1px solid var(--border);}
+.nice-item:last-child{border-bottom:none;}
+.nice-item::before{content:'✦ ';font-size:10px;color:var(--muted);}
+
+/* POWER PHRASE */
+.power-phrase{border-radius:14px;padding:16px 18px;text-align:center;margin-top:4px;}
+.power-phrase.gen{background:var(--gen-dim);border:1px solid var(--gen-border);}
+.power-phrase.biz{background:var(--biz-dim);border:1px solid var(--biz-border);}
+.power-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;color:var(--muted);}
+.power-text{font-size:15px;font-weight:600;line-height:1.5;color:var(--text);}
+
+/* LEVEL BADGES */
+.level-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:4px;text-transform:uppercase;margin-left:5px;vertical-align:middle;}
+.level-badge.a2{background:rgba(100,210,100,.15);color:#64c864;border:1px solid rgba(100,210,100,.3);}
+.level-badge.b1{background:rgba(108,99,255,.15);color:#9c94ff;border:1px solid rgba(108,99,255,.3);}
+.level-badge.b2{background:rgba(255,179,71,.15);color:#ffb347;border:1px solid rgba(255,179,71,.3);}
+.level-badge.c1{background:rgba(255,101,132,.15);color:#ff6584;border:1px solid rgba(255,101,132,.3);}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:50px 20px;color:var(--muted);font-size:15px;display:none;}
+
+/* ══ SAVED PAGE ══ */
+.saved-hero{background:linear-gradient(135deg,#1a1d17 0%,#12170a 60%,#1a1d27 100%);border-bottom:1px solid var(--border);padding:36px 24px 28px;text-align:center;}
+.saved-hero h2{font-size:26px;font-weight:800;color:var(--star);}
+.saved-hero p{color:var(--muted);margin-top:6px;font-size:14px;}
+.saved-empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:15px;}
+.saved-empty .saved-empty-icon{font-size:48px;margin-bottom:12px;}
+.saved-filter-bar{display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px;border-bottom:1px solid var(--border);background:rgba(15,17,23,.96);position:sticky;top:54px;z-index:100;backdrop-filter:blur(12px);}
+.saved-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 18px;position:relative;margin-bottom:12px;}
+.saved-item.gen-item{border-left:3px solid var(--gen);}
+.saved-item.biz-item{border-left:3px solid var(--biz);}
+.saved-item-phrase{font-size:16px;font-weight:700;margin-bottom:5px;padding-right:32px;}
+.saved-item-phrase.gen{color:var(--gen);}
+.saved-item-phrase.biz{color:var(--biz);}
+.saved-item-meaning{font-size:13px;color:var(--muted);margin-bottom:5px;}
+.saved-item-example{font-size:13px;color:var(--text);font-style:italic;}
+.saved-item-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.saved-remove{position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;font-size:18px;color:var(--star);line-height:1;}
+.saved-remove:hover{transform:scale(1.2);}
+
+/* ══ FLASHCARD PAGE ══ */
+.fc-hero{background:linear-gradient(135deg,#1a1027 0%,#12172a 60%,#1a1d27 100%);border-bottom:1px solid var(--border);padding:32px 24px 24px;text-align:center;}
+.fc-hero h2{font-size:26px;font-weight:800;background:linear-gradient(90deg,#ff6584,#6c63ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.fc-hero p{color:var(--muted);margin-top:6px;font-size:14px;}
+.fc-controls{display:flex;justify-content:center;gap:8px;margin-top:16px;flex-wrap:wrap;padding:0 20px;}
+.fc-ctrl-btn{font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .15s;}
+.fc-ctrl-btn:hover,.fc-ctrl-btn.active{background:var(--accent3);border-color:var(--accent3);color:#fff;}
+.fc-ctrl-btn.active.gen-fc{background:var(--gen);border-color:var(--gen);color:#1a1d27;}
+.fc-ctrl-btn.active.biz-fc{background:var(--biz);border-color:var(--biz);color:#1a1d27;}
+.fc-ctrl-btn.active.saved-fc{background:var(--star);border-color:var(--star);color:#1a1d27;}
+.fc-progress-wrap{max-width:540px;margin:20px auto 0;padding:0 20px;}
+.fc-progress-info{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px;}
+.fc-progress-bar{height:6px;background:var(--card);border-radius:3px;overflow:hidden;}
+.fc-progress-fill{height:100%;background:linear-gradient(90deg,#6c63ff,#ff6584);border-radius:3px;transition:width .3s;}
+.fc-arena{max-width:540px;margin:24px auto;padding:0 20px;}
+.fc-card-wrap{perspective:1000px;height:270px;cursor:pointer;}
+.fc-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1);}
+.fc-card.flipped{transform:rotateY(180deg);}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;border:1px solid var(--border);}
+.fc-front{background:var(--surface);}
+.fc-back{background:var(--card);transform:rotateY(180deg);}
+.fc-type-badge{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px;}
+.fc-type-badge.idiom{background:rgba(255,101,132,.15);color:var(--accent3);border:1px solid rgba(255,101,132,.3);}
+.fc-type-badge.vocab{background:rgba(255,179,71,.15);color:var(--gen);border:1px solid rgba(255,179,71,.3);}
+.fc-type-badge.colloc{background:rgba(0,210,160,.12);color:var(--biz);border:1px solid rgba(0,210,160,.3);}
+.fc-type-badge.grammar{background:rgba(108,99,255,.15);color:#9c94ff;border:1px solid rgba(108,99,255,.3);}
+.fc-type-badge.power{background:rgba(255,215,0,.15);color:var(--star);border:1px solid rgba(255,215,0,.3);}
+.fc-front-phrase{font-size:21px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:8px;}
+.fc-tap-hint{font-size:11px;color:var(--muted);opacity:.6;}
+.fc-back-meaning{font-size:14px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:10px;}
+.fc-back-example{font-size:13px;color:var(--muted);font-style:italic;line-height:1.5;}
+.fc-actions{display:flex;justify-content:center;gap:12px;margin-top:16px;flex-wrap:wrap;}
+.fc-btn{font-size:13px;font-weight:700;padding:9px 24px;border-radius:12px;border:none;cursor:pointer;transition:all .15s;}
+.fc-btn.skip{background:var(--card);color:var(--muted);border:1px solid var(--border);}
+.fc-btn.skip:hover{border-color:var(--accent3);color:var(--accent3);}
+.fc-btn.know{background:var(--biz);color:#1a1d27;}
+.fc-btn.know:hover{opacity:.85;}
+.fc-btn.review{background:rgba(255,101,132,.15);color:var(--accent3);border:1px solid rgba(255,101,132,.3);}
+.fc-btn.review:hover{background:var(--accent3);color:#fff;}
+.fc-btn.save-fc{background:rgba(255,215,0,.12);color:var(--star);border:1px solid rgba(255,215,0,.3);}
+.fc-btn.save-fc:hover{background:var(--star);color:#1a1d27;}
+.fc-result{display:none;text-align:center;padding:36px 20px;max-width:480px;margin:0 auto;}
+.fc-result.show{display:block;}
+.fc-result-score{font-size:50px;font-weight:800;background:linear-gradient(90deg,#6c63ff,#00d2a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.fc-result-label{font-size:14px;color:var(--muted);margin-top:3px;}
+.fc-result-msg{font-size:15px;color:var(--text);margin:14px 0;font-weight:600;}
+.fc-restart{background:var(--accent);color:#fff;border:none;padding:10px 26px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;}
+.fc-empty{text-align:center;padding:50px 20px;color:var(--muted);font-size:15px;}
+
+/* EXPAND / COLLAPSE */
+.day-toggle{background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:13px;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;align-self:flex-start;}
+.day-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.day-body{overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1),opacity .25s;}
+.day-body.collapsed{max-height:0!important;opacity:0;pointer-events:none;}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px;color:var(--muted);font-size:13px;}
+
+/* NAV SCROLL on small screens */
+.nav{overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+
+/* ══ MY WORDS PAGE ══ */
+.mine-hero{background:linear-gradient(135deg,#1a1027 0%,#12172a 60%,#1a2027 100%);border-bottom:1px solid var(--border);padding:36px 24px 28px;text-align:center;}
+.mine-hero h2{font-size:26px;font-weight:800;background:linear-gradient(90deg,#ff6584,#ffb347);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.mine-hero p{color:var(--muted);margin-top:6px;font-size:14px;}
+.mine-form-wrap{max-width:620px;margin:28px auto 0;padding:0 20px 16px;}
+.mine-form{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px 20px;}
+.mine-form-title{font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent3);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.mine-field{margin-bottom:14px;}
+.mine-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.mine-input,.mine-textarea{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 13px;font-size:13px;color:var(--text);outline:none;font-family:inherit;transition:border-color .15s;}
+.mine-input:focus,.mine-textarea:focus{border-color:var(--accent3);}
+.mine-textarea{resize:vertical;min-height:68px;}
+.mine-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+@media(max-width:500px){.mine-row{grid-template-columns:1fr 1fr;}}
+.mine-select{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 10px;font-size:12px;color:var(--text);outline:none;cursor:pointer;transition:border-color .15s;}
+.mine-select:focus{border-color:var(--accent3);}
+.mine-add-btn{width:100%;background:linear-gradient(90deg,#ff6584,#ffb347);border:none;border-radius:12px;padding:11px;font-size:14px;font-weight:800;color:#fff;cursor:pointer;transition:opacity .15s;margin-top:4px;}
+.mine-add-btn:hover{opacity:.88;}
+.mine-hint{font-size:11px;color:var(--muted);margin-top:10px;text-align:center;line-height:1.6;}
+.mine-export-btn{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:9px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;margin-top:8px;transition:all .15s;}
+.mine-export-btn:hover{border-color:var(--accent);color:var(--accent);}
+.mine-list-wrap{max-width:620px;margin:0 auto;padding:0 20px 80px;}
+.mine-section-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
+.mine-section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.mine-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;position:relative;margin-bottom:10px;}
+.mine-card.pending{border-left:3px solid var(--accent3);opacity:.85;}
+.mine-card.processed{border-left:3px solid var(--biz);}
+.mine-card-phrase{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;padding-right:60px;}
+.mine-card-meaning{font-size:12px;color:var(--muted);margin-bottom:3px;}
+.mine-card-example{font-size:12px;color:var(--text);font-style:italic;}
+.mine-card-meta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center;}
+.pending-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(255,101,132,.15);color:var(--accent3);border:1px solid rgba(255,101,132,.3);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.mine-delete{position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;line-height:1;transition:color .15s;}
+.mine-delete:hover{color:var(--accent3);}
+.mine-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;}
+.lookup-status{font-size:12px;margin-top:8px;min-height:18px;display:flex;align-items:center;gap:7px;}
+.lookup-status.loading{color:var(--accent3);}
+.lookup-status.success{color:var(--biz);}
+.lookup-status.error{color:var(--accent3);opacity:.7;}
+.lookup-spinner{width:12px;height:12px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mine-input.filled{border-color:var(--biz);}
+.mine-textarea.filled{border-color:var(--biz);}
+.auto-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:8px;background:rgba(0,210,160,.12);color:var(--biz);border:1px solid rgba(0,210,160,.3);margin-left:6px;}
+.mine-phonetic{font-size:13px;color:var(--muted);font-style:italic;letter-spacing:.3px;margin:0 4px;}
+.play-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 8px;transition:all .15s;line-height:1.4;}
+.play-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(108,99,255,.08);}
+.play-btn:active{transform:scale(.95);}
+
+/* ══ GRAMMAR PAGE ══ */
+.gram-hero{background:linear-gradient(135deg,#121a1d 0%,#0f1117 60%,#1a1d2a 100%);border-bottom:1px solid var(--border);padding:36px 24px 28px;text-align:center;}
+.gram-hero h2{font-size:26px;font-weight:800;background:linear-gradient(90deg,#6c63ff,#00d2a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.gram-hero p{color:var(--muted);margin-top:6px;font-size:14px;}
+.gram-filter-bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 20px;border-bottom:1px solid var(--border);background:rgba(15,17,23,.96);position:sticky;top:54px;z-index:100;backdrop-filter:blur(12px);}
+.gram-container{max-width:760px;margin:0 auto;padding:24px 20px 80px;}
+.gram-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:14px;position:relative;}
+.gram-card.gen{border-left:4px solid var(--gen);}
+.gram-card.biz{border-left:4px solid var(--biz);}
+.gram-card-rule{font-size:16px;font-weight:800;margin-bottom:6px;padding-right:80px;}
+.gram-card-rule.gen{color:var(--gen);}
+.gram-card-rule.biz{color:var(--biz);}
+.gram-card-body{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px;}
+.gram-card-ex{font-size:13px;color:var(--text);font-style:italic;}
+.gram-card-meta{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center;}
+.gram-no-results{text-align:center;padding:50px 20px;color:var(--muted);font-size:15px;display:none;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <span class="nav-logo">CTO Chronicles</span>
+  <a class="nav-tab" data-page="home" href="#home">🏠 Home</a>
+  <a class="nav-tab gen-tab" data-page="general" href="#general">🗣 General</a>
+  <a class="nav-tab biz-tab" data-page="business" href="#business">💼 Business</a>
+  <a class="nav-tab fc-tab" data-page="flashcards" href="#flashcards">🃏 Flashcards</a>
+  <a class="nav-tab saved-tab" data-page="saved" href="#saved">⭐ Saved</a>
+  <a class="nav-tab gram-tab" data-page="grammar" href="#grammar">📐 Grammar</a>
+  <a class="nav-tab mine-tab" data-page="mine" href="#mine">✍️ Mine</a>
+  <div class="nav-spacer"></div>
+  <span class="nav-day-badge" id="navDayBadge">Day 2</span>
+</nav>
+
+<!-- HOME -->
+<div class="page" id="page-home">
+  <div class="hero">
+    <div class="hero-badge">Daily English Series</div>
+    <h1>The CTO Chronicles</h1>
+    <p>Follow Daniel — cybersecurity CTO, remote worker, early riser. Two tracks every day.</p>
+    <div class="hero-meta">
+      <div class="hero-stat"><span id="stat-days">0</span>Days</div>
+      <div class="hero-stat"><span id="stat-idioms">0</span>Idioms</div>
+      <div class="hero-stat"><span id="stat-collocs">0</span>Collocations</div>
+      <div class="hero-stat"><span id="stat-vocab">0</span>Vocab</div>
+      <div class="hero-stat"><span id="stat-grammar">0</span>Grammar</div>
+      <div class="hero-stat"><span id="stat-saved">0</span>Saved ⭐</div>
+    </div>
+  </div>
+  <div class="home-cards">
+    <a class="home-card gen-card" href="#general">
+      <div class="hc-icon">🗣</div>
+      <div class="hc-title">General English</div>
+      <div class="hc-desc">Daily life, habits, social conversations and natural expressions.</div>
+      <span class="hc-count" id="hc-gen-count">0 episodes</span>
+    </a>
+    <a class="home-card biz-card" href="#business">
+      <div class="hc-icon">💼</div>
+      <div class="hc-title">Business English</div>
+      <div class="hc-desc">Meetings, Slack, leadership, clients and professional communication.</div>
+      <span class="hc-count" id="hc-biz-count">0 episodes</span>
+    </a>
+    <a class="home-card fc-card" href="#flashcards">
+      <div class="hc-icon">🃏</div>
+      <div class="hc-title">Flashcards</div>
+      <div class="hc-desc">Review idioms, vocab, collocations and grammar with flip cards.</div>
+      <span class="hc-count" id="hc-fc-count">0 cards today</span>
+    </a>
+    <a class="home-card saved-card" href="#saved">
+      <div class="hc-icon">⭐</div>
+      <div class="hc-title">Saved for Review</div>
+      <div class="hc-desc">Items you starred for extra practice. Build your personal list.</div>
+      <span class="hc-count" id="hc-saved-count">0 starred</span>
+    </a>
+  </div>
+</div>
+
+<!-- GENERAL PAGE -->
+<div class="page" id="page-general">
+  <div class="filter-bar" id="genFilterBar">
+    <div class="filter-group">
+      <span class="filter-label">Level</span>
+      <button class="fbtn active" data-f="level" data-v="all">All</button>
+      <button class="fbtn" data-f="level" data-v="b1">B1</button>
+      <button class="fbtn" data-f="level" data-v="b1-b2">B1–B2</button>
+      <button class="fbtn" data-f="level" data-v="b2">B2</button>
+      <button class="fbtn" data-f="level" data-v="c1">C1</button>
+    </div>
+    <div class="filter-sep"></div>
+    <div class="filter-group" id="genTopicGroup"><span class="filter-label">Topic</span><button class="fbtn active" data-f="topic" data-v="all">All</button></div>
+    <div class="filter-sep"></div>
+    <div class="filter-group" id="genDayGroup"><span class="filter-label">Day</span><button class="fbtn active" data-f="day" data-v="all">All</button></div>
+    <input class="filter-search" id="genSearch" type="text" placeholder="🔍 Search…"/>
+  </div>
+  <div class="container" id="genContainer"><p class="no-results" id="genNoResults">No episodes match your filters.</p></div>
+</div>
+
+<!-- BUSINESS PAGE -->
+<div class="page" id="page-business">
+  <div class="filter-bar" id="bizFilterBar">
+    <div class="filter-group">
+      <span class="filter-label">Level</span>
+      <button class="fbtn active" data-f="level" data-v="all">All</button>
+      <button class="fbtn" data-f="level" data-v="b1">B1</button>
+      <button class="fbtn" data-f="level" data-v="b1-b2">B1–B2</button>
+      <button class="fbtn" data-f="level" data-v="b2">B2</button>
+      <button class="fbtn" data-f="level" data-v="c1">C1</button>
+    </div>
+    <div class="filter-sep"></div>
+    <div class="filter-group" id="bizTopicGroup"><span class="filter-label">Topic</span><button class="fbtn active" data-f="topic" data-v="all">All</button></div>
+    <div class="filter-sep"></div>
+    <div class="filter-group" id="bizDayGroup"><span class="filter-label">Day</span><button class="fbtn active" data-f="day" data-v="all">All</button></div>
+    <input class="filter-search" id="bizSearch" type="text" placeholder="🔍 Search…"/>
+  </div>
+  <div class="container" id="bizContainer"><p class="no-results" id="bizNoResults">No episodes match your filters.</p></div>
+</div>
+
+<!-- FLASHCARDS PAGE -->
+<div class="page" id="page-flashcards">
+  <div class="fc-hero">
+    <h2>🃏 Flashcard Deck</h2>
+    <p>Tap a card to reveal. Star cards you want to review later.</p>
+    <div class="fc-controls">
+      <button class="fc-ctrl-btn active" data-deck="today">📅 Today</button>
+      <button class="fc-ctrl-btn" data-deck="all">📚 All</button>
+      <button class="fc-ctrl-btn" data-deck="saved">⭐ Saved</button>
+      <div style="width:1px;height:18px;background:var(--border);"></div>
+      <button class="fc-ctrl-btn active" data-type="all">All Types</button>
+      <button class="fc-ctrl-btn" data-type="idiom">Idioms</button>
+      <button class="fc-ctrl-btn" data-type="vocab">Vocab</button>
+      <button class="fc-ctrl-btn" data-type="colloc">Collocations</button>
+      <button class="fc-ctrl-btn" data-type="grammar">Grammar</button>
+      <div style="width:1px;height:18px;background:var(--border);"></div>
+      <button class="fc-ctrl-btn active gen-fc" data-section="all">All</button>
+      <button class="fc-ctrl-btn" data-section="gen">🗣</button>
+      <button class="fc-ctrl-btn" data-section="biz">💼</button>
+    </div>
+  </div>
+  <div class="fc-progress-wrap" id="fcProgressWrap">
+    <div class="fc-progress-info"><span id="fcProgressLabel">Card 1 of 0</span><span id="fcProgressScore">✓ 0 known</span></div>
+    <div class="fc-progress-bar"><div class="fc-progress-fill" id="fcProgressFill" style="width:0%"></div></div>
+  </div>
+  <div class="fc-arena" id="fcArena">
+    <div class="fc-card-wrap" id="fcCardWrap" onclick="flipCard()">
+      <div class="fc-card" id="fcCard">
+        <div class="fc-face fc-front">
+          <div class="fc-type-badge idiom" id="fcTypeBadge">Idiom</div>
+          <div class="fc-front-phrase" id="fcPhrase">Loading…</div>
+          <button class="pronounce-btn" id="fcPronounceBtn" onclick="fetchAndPlay(this, document.getElementById('fcPhrase').textContent)" style="margin-top:8px">🔊 Pronounce</button>
+          <div class="fc-tap-hint" style="margin-top:10px">Tap card to reveal →</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-type-badge idiom" id="fcTypeBadge2">Idiom</div>
+          <div class="fc-back-meaning" id="fcMeaning"></div>
+          <div class="fc-back-example" id="fcExample"></div>
+          <div style="margin-top:10px;font-size:11px;color:var(--muted);" id="fcLevelHint"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-actions" id="fcActions" style="display:none">
+      <button class="fc-btn review" onclick="markCard('review')">↩ Again</button>
+      <button class="fc-btn save-fc" id="fcSaveBtn" onclick="saveCurrentCard()">⭐ Save</button>
+      <button class="fc-btn skip" onclick="nextCard()">Skip →</button>
+      <button class="fc-btn know" onclick="markCard('know')">✓ Got It!</button>
+    </div>
+    <div class="fc-result" id="fcResult">
+      <div class="fc-result-score" id="fcScore">0%</div>
+      <div class="fc-result-label">cards known</div>
+      <div class="fc-result-msg" id="fcMsg"></div>
+      <button class="fc-restart" onclick="restartDeck()">🔄 Restart</button>
+    </div>
+    <div class="fc-empty" id="fcEmpty" style="display:none">No cards match your filters. Try a different selection.</div>
+  </div>
+</div>
+
+<!-- SAVED PAGE -->
+<div class="page" id="page-saved">
+  <div class="saved-hero">
+    <h2>⭐ Saved for Review</h2>
+    <p>Items you starred. Practice them in Flashcards using the "Saved" deck filter.</p>
+  </div>
+  <div class="saved-filter-bar" id="savedFilterBar">
+    <button class="fc-ctrl-btn active" data-sf="all">All Types</button>
+    <button class="fc-ctrl-btn" data-sf="idiom">Idioms</button>
+    <button class="fc-ctrl-btn" data-sf="vocab">Vocab</button>
+    <button class="fc-ctrl-btn" data-sf="colloc">Collocations</button>
+    <button class="fc-ctrl-btn" data-sf="grammar">Grammar</button>
+    <button class="fc-ctrl-btn" data-sf="power">Power Phrases</button>
+  </div>
+  <div class="container" id="savedContainer">
+    <div class="saved-empty" id="savedEmpty">
+      <div class="saved-empty-icon">⭐</div>
+      <div>No saved items yet.<br/>Star any card while reading or during flashcards to save it here.</div>
+    </div>
+  </div>
+</div>
+
+<!-- GRAMMAR PAGE -->
+<div class="page" id="page-grammar">
+  <div class="gram-hero">
+    <h2>📐 Grammar Reference</h2>
+    <p>All grammar points from every episode — your personal grammar guide.</p>
+  </div>
+  <div class="gram-filter-bar" id="gramFilterBar">
+    <button class="fc-ctrl-btn active" data-gf="all">All</button>
+    <button class="fc-ctrl-btn" data-gf="gen">🗣 General</button>
+    <button class="fc-ctrl-btn" data-gf="biz">💼 Business</button>
+    <div style="width:1px;height:18px;background:var(--border)"></div>
+    <button class="fc-ctrl-btn active" data-glvl="all">All Levels</button>
+    <button class="fc-ctrl-btn" data-glvl="a2">A2</button>
+    <button class="fc-ctrl-btn" data-glvl="b1">B1</button>
+    <button class="fc-ctrl-btn" data-glvl="b2">B2</button>
+    <button class="fc-ctrl-btn" data-glvl="c1">C1</button>
+  </div>
+  <div class="gram-container" id="gramContainer">
+    <p class="gram-no-results" id="gramNoResults">No grammar points match your filters.</p>
+  </div>
+</div>
+
+<!-- MY WORDS PAGE -->
+<div class="page" id="page-mine">
+  <div class="mine-hero">
+    <h2>✍️ My Words</h2>
+    <p>Add any word or phrase — in English or Farsi. Claude will translate, explain, and categorize it overnight.</p>
+  </div>
+  <div class="mine-form-wrap">
+    <div class="mine-form">
+      <div class="mine-form-title">➕ Add a New Word or Phrase</div>
+      <div class="mine-field">
+        <div class="mine-label">Word / Phrase</div>
+        <input class="mine-input" id="minePhrase" type="text" placeholder='e.g. "cut corners", "ambiguous", "pull through"…'/>
+        <div class="lookup-status" id="lookupStatus"></div>
+      </div>
+      <div class="mine-field">
+        <div class="mine-label">Meaning in English <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — Claude will write it in English)</span></div>
+        <input class="mine-input" id="mineMeaning" type="text" placeholder="Leave blank — Claude will explain it in English…"/>
+      </div>
+      <div class="mine-field">
+        <div class="mine-label">Example Sentence <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></div>
+        <textarea class="mine-textarea" id="mineExample" placeholder="Leave blank for auto-generated example…"></textarea>
+      </div>
+      <div class="mine-field">
+        <div class="mine-label">Context / Notes <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optional — where did you see/hear it?)</span></div>
+        <input class="mine-input" id="mineContext" type="text" placeholder='e.g. "heard in a board meeting" or "from Netflix show"'/>
+      </div>
+      <div class="mine-row">
+        <div>
+          <div class="mine-label">Type</div>
+          <select class="mine-select" id="mineType">
+            <option value="auto">🤖 Auto-detect</option>
+            <option value="idiom">🔥 Idiom</option>
+            <option value="vocab">📚 Vocab</option>
+            <option value="colloc">💎 Collocation</option>
+            <option value="grammar">📐 Grammar</option>
+          </select>
+        </div>
+        <div>
+          <div class="mine-label">Section</div>
+          <select class="mine-select" id="mineSection">
+            <option value="auto">🤖 Auto</option>
+            <option value="gen">🗣 General</option>
+            <option value="biz">💼 Business</option>
+          </select>
+        </div>
+        <div>
+          <div class="mine-label">Level</div>
+          <select class="mine-select" id="mineLevel">
+            <option value="auto">🤖 Auto</option>
+            <option value="a2">A2</option>
+            <option value="b1">B1</option>
+            <option value="b2">B2</option>
+            <option value="c1">C1</option>
+          </select>
+        </div>
+      </div>
+      <button class="mine-add-btn" onclick="addMyWord()">➕ Add to My Words</button>
+      <button class="mine-export-btn" onclick="exportMyWords()" id="mineExportBtn" style="display:none">📥 Export for Claude Processing (my-words.json)</button>
+      <div class="mine-hint">
+        <strong style="color:var(--biz)">⚡ Real-time lookup:</strong> Type any English word or phrase — meaning and example auto-fill instantly from the dictionary.<br/>
+        If not found, fill the fields yourself and the card is saved as-is.
+      </div>
+    </div>
+  </div>
+  <div class="mine-list-wrap">
+    <div id="minePendingSection" style="display:none">
+      <div class="mine-section-title">⏳ Pending — Waiting for Claude</div>
+      <div id="minePendingList"></div>
+    </div>
+    <div id="mineProcessedSection" style="display:none">
+      <div class="mine-section-title">✅ Processed — Ready to Study</div>
+      <div id="mineProcessedList"></div>
+    </div>
+    <div class="mine-empty" id="mineEmpty">No words yet. Add your first one above!</div>
+  </div>
+</div>
+
+<!-- DATA SOURCE (hidden) -->
+<div id="dataSource" style="display:none">
+
+<div id="userWords"><!-- processed user words live here -->
+  <div data-type="vocab" data-section="gen" data-day="mine" data-level="b2"
+       data-phrase='"ambiguous"'
+       data-meaning="Having more than one possible meaning; unclear or open to different interpretations — you&apos;re not sure what was intended"
+       data-example='"The manager&apos;s feedback was so ambiguous that nobody knew whether the project was approved."'
+       data-phonetic="/æmˈbɪɡ.ju.əs/"
+       data-audio="https://api.dictionaryapi.dev/media/pronunciations/en/ambiguous-us.mp3"
+       data-user="true"></div>
+  <div data-type="vocab" data-section="biz" data-day="mine" data-level="c1"
+       data-phrase='"eschew"'
+       data-meaning="To deliberately avoid or stay away from something as a matter of principle — choosing not to do it, often because you think it&apos;s harmful or unnecessary"
+       data-example='"Daniel eschews back-to-back meetings — he blocks two hours every morning for deep work."'
+       data-phonetic="/ɪˈskjuː/"
+       data-audio="https://api.dictionaryapi.dev/media/pronunciations/en/eschew-us.mp3"
+       data-user="true"></div>
+  <div data-type="vocab" data-section="gen" data-day="mine" data-level="b2"
+       data-phrase='"condescending"'
+       data-meaning="Treating someone as if they are less intelligent or less capable than you — often talking down to them, even without realising it"
+       data-example='"His tone in the meeting was condescending — he kept explaining things the team already knew."'
+       data-phonetic="/ˌkɑːn.dɪˈsen.dɪŋ/"
+       data-audio="https://api.dictionaryapi.dev/media/pronunciations/en/condescending-us.mp3"
+       data-user="true"></div>
+  <div data-type="vocab" data-section="biz" data-day="mine" data-level="b2"
+       data-phrase='"implies"'
+       data-meaning="To suggest or indicate something indirectly without saying it outright — the meaning is there, but not stated"
+       data-example='"His hesitation implies he&apos;s not fully convinced by the proposal."'
+       data-phonetic="/ɪmˈplaɪz/"
+       data-audio="https://api.dictionaryapi.dev/media/pronunciations/en/implies-us.mp3"
+       data-user="true"></div>
+</div>
+
+<div data-day="1" data-date="March 13, 2026" data-level="b1" data-topics="morning-routine,daily-habits,slack,work-updates" data-title="☀️ Monday Morning">
+  <div data-section="gen">
+    <div data-iceq="What does your perfect morning look like?" data-icetip="Try: 'I usually…' / 'I tend to…' / 'The first thing I do is…'"></div>
+    <div data-dialogue="true" data-dlabel="Daniel meets his neighbor Tom — 7:15am" data-dtype="gen">
+      <div data-spk="Tom" data-spkclass="s3">Morning! <span class="hl-g">You're up bright and early</span> today.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Ha, yeah. I'm <span class="hl-g">an early bird</span> — always have been. I like to <span class="hl-g">ease into the day</span> before things <span class="hl-g">pick up</span>.</div>
+      <div data-spk="Tom" data-spkclass="s3">I wish I could do that. I always <span class="hl-g">hit the snooze button</span> like three times.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Honestly, it took me a while too. I just <span class="hl-g">got into the habit</span> of making tea first — no phone, no laptop. It makes a huge difference.</div>
+      <div data-spk="Tom" data-spkclass="s3">That sounds <span class="hl-g">doable</span> actually. Maybe I should <span class="hl-g">give it a shot</span>.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Definitely <span class="hl-g">worth it</span>. Anyway, <span class="hl-g">I'd better get going</span> — big day ahead!</div>
+    </div>
+    <div data-type="idiom" data-section="gen" data-day="1" data-level="b1" data-phrase='"An early bird"' data-meaning="Someone who wakes up or starts work very early" data-example='"She&apos;s an early bird — always at her desk by 7."'></div>
+    <div data-type="idiom" data-section="gen" data-day="1" data-level="b2" data-phrase='"Ease into something"' data-meaning="Start gently and slowly, without rushing" data-example='"I ease into my mornings with coffee and quiet music."'></div>
+    <div data-type="idiom" data-section="gen" data-day="1" data-level="b1" data-phrase='"Hit the snooze button"' data-meaning="Delay waking up; avoid or postpone something" data-example='"Stop hitting the snooze button on that conversation."'></div>
+    <div data-type="idiom" data-section="gen" data-day="1" data-level="b1" data-phrase='"Give it a shot"' data-meaning="Try something, even if you're unsure it will work" data-example='"I&apos;ve never tried journaling but I might give it a shot."'></div>
+    <div data-type="idiom" data-section="gen" data-day="1" data-level="a2" data-phrase='"I&apos;d better get going"' data-meaning="I need to leave now; I should go" data-example='"It&apos;s getting late — I&apos;d better get going."'></div>
+    <div data-type="vocab" data-section="gen" data-day="1" data-level="b1" data-phrase="doable" data-meaning="Possible and manageable to do" data-example='"That sounds totally doable."'></div>
+    <div data-type="vocab" data-section="gen" data-day="1" data-level="a2" data-phrase="routine" data-meaning="A regular set of actions you repeat daily" data-example='"My morning routine takes about 45 minutes."'></div>
+    <div data-type="vocab" data-section="gen" data-day="1" data-level="b1" data-phrase="pick up (pace)" data-meaning="Become more active, busy, or faster" data-example='"Things really pick up around 9am."'></div>
+    <div data-type="vocab" data-section="gen" data-day="1" data-level="b1" data-phrase="refreshed" data-meaning="Feeling restored, energized, and ready" data-example='"I feel refreshed after a quiet morning."'></div>
+    <div data-type="vocab" data-section="gen" data-day="1" data-level="b2" data-phrase="worthwhile" data-meaning="Worth the time and effort; genuinely beneficial" data-example='"The extra preparation was definitely worthwhile."'></div>
+    <div data-type="grammar" data-section="gen" data-day="1" data-level="b1" data-phrase='"used to" vs "tend to"' data-meaning="'used to' = past habits that stopped. 'tend to' = current regular habits." data-example='"I used to sleep in, but now I tend to wake up at 6."'></div>
+    <div data-type="colloc" data-section="gen" data-day="1" data-level="b1" data-phrase="get into the habit" data-meaning="Start doing something regularly" data-example='"I got into the habit of journaling every night."'></div>
+    <div data-type="colloc" data-section="gen" data-day="1" data-level="b1" data-phrase="make a huge difference" data-meaning="Have a big, positive impact" data-example='"Sleeping 8 hours makes a huge difference."'></div>
+    <div data-type="colloc" data-section="gen" data-day="1" data-level="b2" data-phrase="clear your head" data-meaning="Stop thinking about stress; reset your mind" data-example='"A short walk always helps me clear my head."'></div>
+    <div data-type="colloc" data-section="gen" data-day="1" data-level="b1" data-phrase="big day ahead" data-meaning="An important or busy day is coming" data-example='"Get some rest — you&apos;ve got a big day ahead."'></div>
+    <div data-type="colloc" data-section="gen" data-day="1" data-level="b2" data-phrase="always have been" data-meaning="Emphasizes a long-standing unchanged trait" data-example='"I&apos;m a morning person — always have been."'></div>
+    <div data-type="power" data-section="gen" data-day="1" data-level="b1" data-phrase="Habits Power Phrase" data-meaning="Sound natural talking about habits" data-example='"I tend to [habit] — it took me a while to get into it, but it makes a huge difference."'></div>
+    <div data-nice='["Instead of &quot;good&quot; → say &quot;worthwhile&quot;, &quot;fulfilling&quot;, &quot;rewarding&quot;","Instead of &quot;I go to sleep early&quot; → &quot;I turn in early&quot;","&quot;Honestly&quot; at the start softens a statement naturally","Use &quot;always have been&quot; to emphasize a lifelong trait","Instead of &quot;I don&apos;t use my phone&quot; → &quot;no phone, no laptop&quot; — punchy rhythm"]'></div>
+  </div>
+  <div data-section="biz">
+    <div data-iceq="How do you usually kick off your workday?" data-icetip="Try: 'I typically…' / 'The first thing I do is…'"></div>
+    <div data-dialogue="true" data-dlabel="Slack — Monday 8:47am" data-dtype="biz">
+      <div data-spk="Sarah" data-spkclass="s1">Morning Daniel. Quick <span class="hl-b">heads-up</span> — the board wants a security audit update <span class="hl-b">by EOD</span>. Can you <span class="hl-b">pull something together</span>?</div>
+      <div data-spk="Daniel" data-spkclass="s2">Morning. Sure, <span class="hl-b">I'm on it</span>. I'll have a draft ready by early afternoon. Should I <span class="hl-b">loop in</span> the legal team, or keep it internal for now?</div>
+      <div data-spk="Sarah" data-spkclass="s1"><span class="hl-b">Keep it tight</span> for now. Let's not <span class="hl-b">open a can of worms</span> before we know what we're dealing with.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Understood. I'll <span class="hl-b">flag</span> anything critical and keep the rest <span class="hl-b">high-level</span>. I'll <span class="hl-b">ping</span> you once it's ready.</div>
+      <div data-spk="Sarah" data-spkclass="s1">Perfect. <span class="hl-b">Appreciate you jumping on this</span>.</div>
+      <div data-spk="Daniel" data-spkclass="s2"><span class="hl-b">Happy to.</span> I'll <span class="hl-b">keep you posted</span>.</div>
+    </div>
+    <div data-type="idiom" data-section="biz" data-day="1" data-level="b1" data-phrase='"Heads-up"' data-meaning="A quick advance notice or warning" data-example='"Just a heads-up — the client moved the call to 3pm."'></div>
+    <div data-type="idiom" data-section="biz" data-day="1" data-level="b1" data-phrase='"I&apos;m on it"' data-meaning="I'm already handling it — confident and immediate" data-example='"Can you fix the API issue?" — "I&apos;m on it."'></div>
+    <div data-type="idiom" data-section="biz" data-day="1" data-level="b2" data-phrase='"Open a can of worms"' data-meaning="Bring up something that creates many new complications" data-example='"Raising that will open a can of worms."'></div>
+    <div data-type="idiom" data-section="biz" data-day="1" data-level="b1" data-phrase='"Keep it tight"' data-meaning="Keep something short, focused, and contained" data-example='"Keep the report tight — three pages max."'></div>
+    <div data-type="idiom" data-section="biz" data-day="1" data-level="b1" data-phrase='"Keep you posted"' data-meaning="Keep you updated as new information arrives" data-example='"I&apos;ll keep you posted as things develop."'></div>
+    <div data-type="vocab" data-section="biz" data-day="1" data-level="b2" data-phrase="security audit" data-meaning="Formal review of a system's security posture" data-example='"We run a full security audit every quarter."'></div>
+    <div data-type="vocab" data-section="biz" data-day="1" data-level="b1" data-phrase="draft (n.)" data-meaning="An early, non-final version of a document" data-example='"Here&apos;s a first draft — let me know your thoughts."'></div>
+    <div data-type="vocab" data-section="biz" data-day="1" data-level="a2" data-phrase="internal" data-meaning="Within the company; not for external sharing" data-example='"This report is for internal use only."'></div>
+    <div data-type="vocab" data-section="biz" data-day="1" data-level="b1" data-phrase="critical (adj.)" data-meaning="Extremely important; must be addressed urgently" data-example='"We found a critical vulnerability in the system."'></div>
+    <div data-type="vocab" data-section="biz" data-day="1" data-level="b1" data-phrase="EOD" data-meaning="End of day — standard in professional messages" data-example='"Please send this over by EOD."'></div>
+    <div data-type="grammar" data-section="biz" data-day="1" data-level="b1" data-phrase='"I&apos;ll" vs "I can"' data-meaning="'I'll' = confident commitment. 'I can' = sounds uncertain. Always use 'I'll' when committing." data-example='"I&apos;ll send the report by 2pm." vs "I can send it later." (weak)'></div>
+    <div data-type="colloc" data-section="biz" data-day="1" data-level="b1" data-phrase="pull something together" data-meaning="Quickly prepare or organize something" data-example='"Can you pull a summary together by noon?"'></div>
+    <div data-type="colloc" data-section="biz" data-day="1" data-level="b1" data-phrase="loop someone in" data-meaning="Include someone in a conversation or email thread" data-example='"Loop me in when you hear back from the client."'></div>
+    <div data-type="colloc" data-section="biz" data-day="1" data-level="b2" data-phrase="keep it high-level" data-meaning="Stay general; avoid unnecessary detail" data-example='"Just keep it high-level for the board."'></div>
+    <div data-type="colloc" data-section="biz" data-day="1" data-level="b1" data-phrase="flag an issue" data-meaning="Highlight something that needs attention" data-example='"Please flag any risks in the report."'></div>
+    <div data-type="colloc" data-section="biz" data-day="1" data-level="a2" data-phrase="happy to help" data-meaning="Polite, warm way to say 'no problem'" data-example='"Happy to jump on a call if it&apos;s easier."'></div>
+    <div data-type="power" data-section="biz" data-day="1" data-level="b1" data-phrase="Professional Messaging Power Phrase" data-meaning="Use in any professional message" data-example='"I&apos;ll have it ready by [time]. Do you want me to loop in [person], or keep it internal for now?"'></div>
+    <div data-nice='["&quot;Appreciate you jumping on this&quot; — warmer than just thanks","Replace &quot;Sorry for the delay&quot; with &quot;Thanks for your patience&quot;","End messages with &quot;Happy to jump on a call if easier&quot;","&quot;Noted — I&apos;ll factor that in&quot; is far warmer than just &quot;Noted&quot;","Use &quot;for now&quot; to soften a decision — keeps it flexible"]'></div>
+  </div>
+</div>
+
+<div data-day="2" data-date="March 14, 2026" data-level="b1-b2" data-topics="weekend-plans,socializing,team-meetings,leadership" data-title="🏔️ The Weekend &amp; The Standup">
+  <div data-section="gen">
+    <div data-iceq="How do you usually unwind after a busy week?" data-icetip="Try: 'I tend to…' / 'Nothing beats…' / 'The best way to decompress is…'"></div>
+    <div data-dialogue="true" data-dlabel="Daniel calls his friend Alex — Friday evening" data-dtype="gen">
+      <div data-spk="Alex" data-spkclass="s3">Hey! What are you <span class="hl-g">up to</span> this weekend? Any plans?</div>
+      <div data-spk="Daniel" data-spkclass="s2">Honestly, I've been <span class="hl-g">cooped up</span> all week. I need to <span class="hl-g">get out of the city</span> and just breathe.</div>
+      <div data-spk="Alex" data-spkclass="s3">Same here. What if we <span class="hl-g">head up to</span> the mountains? There's a trail I've been meaning to check out for ages.</div>
+      <div data-spk="Daniel" data-spkclass="s2">That sounds perfect. Overnight or just a day out?</div>
+      <div data-spk="Alex" data-spkclass="s3">Let's <span class="hl-g">play it by ear</span> — depends on the weather. We could always <span class="hl-g">make a night of it</span>.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Works for me. I'll check the forecast and <span class="hl-g">get back to you</span> tonight. And let's <span class="hl-g">grab a bite</span> on the way up.</div>
+      <div data-spk="Alex" data-spkclass="s3">I'm already starving just thinking about it. <span class="hl-g">It's a plan!</span></div>
+    </div>
+    <div data-type="idiom" data-section="gen" data-day="2" data-level="b1" data-phrase='"Cooped up"' data-meaning="Feeling trapped or confined indoors for too long" data-example='"The kids have been cooped up all weekend — they need fresh air."'></div>
+    <div data-type="idiom" data-section="gen" data-day="2" data-level="b2" data-phrase='"Play it by ear"' data-meaning="Decide what to do as the situation develops, no fixed plan" data-example='"No strict agenda — we&apos;ll just play it by ear."'></div>
+    <div data-type="idiom" data-section="gen" data-day="2" data-level="b2" data-phrase='"Make a night of it"' data-meaning="Extend an outing into the evening" data-example='"We went for dinner and then made a night of it."'></div>
+    <div data-type="idiom" data-section="gen" data-day="2" data-level="b1" data-phrase='"Get back to you"' data-meaning="Respond to someone later with an answer or update" data-example='"Let me check my schedule — I&apos;ll get back to you by tomorrow."'></div>
+    <div data-type="idiom" data-section="gen" data-day="2" data-level="b1" data-phrase='"It&apos;s a plan!"' data-meaning="Enthusiastic, natural way to confirm a decision" data-example='"Dinner at 7?" — "It&apos;s a plan!"'></div>
+    <div data-type="vocab" data-section="gen" data-day="2" data-level="b1" data-phrase="unwind" data-meaning="Relax and release stress after work or tension" data-example='"I like to unwind with a good book in the evening."'></div>
+    <div data-type="vocab" data-section="gen" data-day="2" data-level="b1" data-phrase="getaway" data-meaning="A short trip taken to escape routine and recharge" data-example='"We planned a weekend getaway to the mountains."'></div>
+    <div data-type="vocab" data-section="gen" data-day="2" data-level="b2" data-phrase="decompress" data-meaning="Mentally relax after intense pressure or focus" data-example='"I need a few days off just to properly decompress."'></div>
+    <div data-type="vocab" data-section="gen" data-day="2" data-level="b2" data-phrase="spontaneous" data-meaning="Unplanned; natural and in-the-moment" data-example='"I love spontaneous road trips — just pack a bag and go."'></div>
+    <div data-type="vocab" data-section="gen" data-day="2" data-level="a2" data-phrase="starving" data-meaning="Informal: extremely hungry (exaggerated but natural)" data-example='"I&apos;m absolutely starving — haven&apos;t eaten since breakfast."'></div>
+    <div data-type="grammar" data-section="gen" data-day="2" data-level="b2" data-phrase="Present Perfect Continuous" data-meaning="'have/has been + verb-ing' for actions ongoing from past until now. Emphasizes duration and ongoing feeling." data-example='"I&apos;ve been cooped up all week." (still feeling it) vs "I was cooped up." (finished, past)'></div>
+    <div data-type="colloc" data-section="gen" data-day="2" data-level="b1" data-phrase="head up to" data-meaning="Travel toward a higher or remote area" data-example='"We&apos;re heading up to the lake this weekend."'></div>
+    <div data-type="colloc" data-section="gen" data-day="2" data-level="b1" data-phrase="grab a bite" data-meaning="Have a quick, informal meal" data-example='"Want to grab a bite before the film?"'></div>
+    <div data-type="colloc" data-section="gen" data-day="2" data-level="b2" data-phrase="change of scenery" data-meaning="A new environment to refresh your mind" data-example='"I really need a change of scenery."'></div>
+    <div data-type="colloc" data-section="gen" data-day="2" data-level="b1" data-phrase="be up to something" data-meaning="Be doing something / have plans" data-example='"What are you up to this Sunday?"'></div>
+    <div data-type="colloc" data-section="gen" data-day="2" data-level="b2" data-phrase="have been meaning to" data-meaning="Have intended to do something but haven't yet" data-example='"I&apos;ve been meaning to call you for weeks."'></div>
+    <div data-type="power" data-section="gen" data-day="2" data-level="b2" data-phrase="Expressing Need for a Break" data-meaning="Natural, expressive, native-level" data-example='"I&apos;ve been cooped up all week — I could really use a change of scenery. Let&apos;s play it by ear."'></div>
+    <div data-nice='["Instead of &quot;I want to relax&quot; → &quot;I could really use a change of scenery&quot;","&quot;Nothing beats [thing]&quot; — powerful natural expression","Use &quot;works for me&quot; instead of &quot;okay&quot; — sounds more engaged","&quot;I&apos;ve been meaning to…&quot; — natural for things you&apos;ve been putting off","Use &quot;for ages&quot; instead of &quot;for a long time&quot; — more expressive"]'></div>
+  </div>
+  <div data-section="biz">
+    <div data-iceq="How do you handle it when someone on your team hits a roadblock?" data-icetip="Try: 'My approach is to…' / 'In my experience…'"></div>
+    <div data-dialogue="true" data-dlabel="Monday standup — video call 9:05am" data-dtype="biz">
+      <div data-spk="Daniel" data-spkclass="s2">Alright team, <span class="hl-b">keep this tight</span> — 15 minutes max. Marcus, where are we on the firewall module?</div>
+      <div data-spk="Marcus" data-spkclass="s1">I <span class="hl-b">hit a few roadblocks</span> last week. The third-party API docs are <span class="hl-b">all over the place</span>. About two days behind.</div>
+      <div data-spk="Daniel" data-spkclass="s2">I appreciate you <span class="hl-b">flagging that early</span>. Can you <span class="hl-b">walk me through</span> what's blocking you?</div>
+      <div data-spk="Marcus" data-spkclass="s1">The auth endpoint keeps timing out. None of my approaches <span class="hl-b">hold up under load</span>.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Let's <span class="hl-b">get you unblocked</span> today — I'll <span class="hl-b">reach out</span> to their support directly. Nina, anything <span class="hl-b">on your end</span> that depends on this?</div>
+      <div data-spk="Nina" data-spkclass="s4">Not urgently, but I'll need it by Thursday for the client demo.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Noted. Marcus — let's <span class="hl-b">touch base</span> after this and <span class="hl-b">work out a realistic timeline</span>. I don't want to <span class="hl-b">overpromise</span>.</div>
+    </div>
+    <div data-type="idiom" data-section="biz" data-day="2" data-level="b2" data-phrase='"Hit a roadblock"' data-meaning="Encounter a serious obstacle that stops or slows progress" data-example='"We hit a roadblock with the vendor contract."'></div>
+    <div data-type="idiom" data-section="biz" data-day="2" data-level="b1" data-phrase='"All over the place"' data-meaning="Disorganized, inconsistent, or messy" data-example='"Their pricing model is all over the place."'></div>
+    <div data-type="idiom" data-section="biz" data-day="2" data-level="b2" data-phrase='"Get someone unblocked"' data-meaning="Remove whatever is preventing someone from moving forward" data-example='"My main job as CTO is to get my team unblocked fast."'></div>
+    <div data-type="idiom" data-section="biz" data-day="2" data-level="b1" data-phrase='"On your end"' data-meaning="From your side; in your area of responsibility" data-example='"Is everything okay on your end with the deployment?"'></div>
+    <div data-type="idiom" data-section="biz" data-day="2" data-level="b1" data-phrase='"Touch base"' data-meaning="Have a brief check-in to stay aligned" data-example='"Let&apos;s touch base before the client call."'></div>
+    <div data-type="vocab" data-section="biz" data-day="2" data-level="b2" data-phrase="roadblock" data-meaning="An obstacle preventing progress on a task" data-example='"Identify every roadblock before the sprint ends."'></div>
+    <div data-type="vocab" data-section="biz" data-day="2" data-level="b2" data-phrase="authentication" data-meaning="Verifying the identity of a user or system" data-example='"The authentication flow broke after the update."'></div>
+    <div data-type="vocab" data-section="biz" data-day="2" data-level="b2" data-phrase="overpromise" data-meaning="Commit to more than can realistically be delivered" data-example='"Never overpromise to a client — it destroys trust."'></div>
+    <div data-type="vocab" data-section="biz" data-day="2" data-level="b1" data-phrase="timeline" data-meaning="A schedule showing when tasks will be completed" data-example='"Can you share a realistic timeline for the release?"'></div>
+    <div data-type="vocab" data-section="biz" data-day="2" data-level="b1" data-phrase="standup" data-meaning="A short daily team meeting for updates and blockers" data-example='"We run a 10-minute standup every morning."'></div>
+    <div data-type="grammar" data-section="biz" data-day="2" data-level="b2" data-phrase="Indirect Questions" data-meaning="'Can you / Could you / I was wondering if…' instead of direct questions. Sounds collaborative, not aggressive." data-example='"Can you walk me through what&apos;s blocking you?" vs blunt "What is blocking you?"'></div>
+    <div data-type="colloc" data-section="biz" data-day="2" data-level="b2" data-phrase="walk someone through" data-meaning="Explain something step by step" data-example='"Can you walk me through your approach?"'></div>
+    <div data-type="colloc" data-section="biz" data-day="2" data-level="b1" data-phrase="reach out to" data-meaning="Contact someone to help, ask, or follow up" data-example='"I&apos;ll reach out to their support team today."'></div>
+    <div data-type="colloc" data-section="biz" data-day="2" data-level="b1" data-phrase="behind schedule" data-meaning="Later than the planned or expected time" data-example='"We&apos;re two days behind schedule."'></div>
+    <div data-type="colloc" data-section="biz" data-day="2" data-level="b2" data-phrase="work out a timeline" data-meaning="Collaboratively create a realistic schedule" data-example='"Let&apos;s work out a timeline everyone can commit to."'></div>
+    <div data-type="colloc" data-section="biz" data-day="2" data-level="b2" data-phrase="flag something early" data-meaning="Raise an issue as soon as it appears" data-example='"Always flag problems early — we can still fix them."'></div>
+    <div data-type="power" data-section="biz" data-day="2" data-level="b2" data-phrase="Leadership Standup Power Phrase" data-meaning="Use in any standup or 1:1 to unblock and support" data-example='"I appreciate you flagging that early. Let&apos;s get you unblocked — touch base with me after this call."'></div>
+    <div data-nice='["&quot;I appreciate you flagging that early&quot; — rewards transparency","Replace &quot;Why are you late?&quot; with &quot;Help me understand where things stand&quot;","&quot;I don&apos;t want to overpromise&quot; protects team AND client relationship","End standups with &quot;Any blockers I should know about?&quot;","&quot;Noted — I&apos;ll factor that in&quot; is warmer than just &quot;Noted&quot;"]'></div>
+  </div>
+</div>
+
+</div><!-- end dataSource -->
+
+<script>
+// ═══════════════════════════════════════
+//  SAVED SYSTEM (localStorage)
+// ═══════════════════════════════════════
+function getSaved(){ try{ return JSON.parse(localStorage.getItem('cto_saved')||'[]'); }catch(e){ return []; } }
+function setSaved(arr){ try{ localStorage.setItem('cto_saved', JSON.stringify(arr)); }catch(e){} }
+function isStarred(phrase){ return getSaved().some(s=>s.phrase===phrase); }
+function toggleStar(card){
+  let saved = getSaved();
+  const idx = saved.findIndex(s=>s.phrase===card.phrase);
+  if(idx>=0){ saved.splice(idx,1); }
+  else { saved.push(card); }
+  setSaved(saved);
+  refreshStarButtons();
+  updateSavedStats();
+  if(document.getElementById('page-saved').classList.contains('active')) renderSavedPage();
+}
+
+// ═══════════════════════════════════════
+//  DATA PARSING
+// ═══════════════════════════════════════
+const allDays=[], allFlashcards=[];
+const ds = document.getElementById('dataSource');
+
+ds.querySelectorAll(':scope > [data-day]').forEach(dayEl=>{
+  const day={
+    num:   dayEl.dataset.day,
+    date:  dayEl.dataset.date,
+    level: dayEl.dataset.level,
+    topics:dayEl.dataset.topics,
+    title: dayEl.dataset.title,
+    gen:   parseSection(dayEl.querySelector('[data-section="gen"]'),'gen',dayEl.dataset.day),
+    biz:   parseSection(dayEl.querySelector('[data-section="biz"]'),'biz',dayEl.dataset.day),
+  };
+  allDays.push(day);
+});
+
+function parseSection(secEl,type,dayNum){
+  if(!secEl) return null;
+  const out={type,dayNum};
+  const ice=secEl.querySelector('[data-iceq]');
+  if(ice) out.ice={q:ice.dataset.iceq,tip:ice.dataset.icetip};
+  const dlg=secEl.querySelector('[data-dialogue]');
+  if(dlg){
+    out.dialogue={label:dlg.dataset.dlabel,dtype:dlg.dataset.dtype,lines:[]};
+    dlg.querySelectorAll('[data-spk]').forEach(l=>{
+      out.dialogue.lines.push({spk:l.dataset.spk,cls:l.dataset.spkclass,html:l.innerHTML});
+    });
+  }
+  out.items=[];
+  secEl.querySelectorAll('[data-type]').forEach(item=>{
+    const card={type:item.dataset.type,section:type,day:dayNum,level:item.dataset.level,
+      phrase:item.dataset.phrase,meaning:item.dataset.meaning,example:item.dataset.example};
+    out.items.push(card);
+    allFlashcards.push(card);
+  });
+  const nice=secEl.querySelector('[data-nice]');
+  if(nice){ try{ out.nice=JSON.parse(nice.dataset.nice); }catch(e){} }
+  return out;
+}
+
+// ═══════════════════════════════════════
+//  BUILD HTML HELPERS
+// ═══════════════════════════════════════
+// ── Pronunciation: Web Speech API — works offline, handles full phrases ──
+// Pre-warm voices (async in some browsers)
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener('voiceschanged',()=>{});
+}
+window.fetchAndPlay=function(btn, phrase){
+  if(!phrase) return;
+  const clean=phrase.replace(/^["']|["']$/g,'').trim();
+  if(!clean) return;
+  if(!window.speechSynthesis){ btn.textContent='🔇'; return; }
+  // Stop any ongoing speech first
+  window.speechSynthesis.cancel();
+  const utter=new SpeechSynthesisUtterance(clean);
+  utter.lang='en-US';
+  utter.rate=0.88;
+  utter.pitch=1;
+  // Pick best US English voice available
+  const voices=window.speechSynthesis.getVoices();
+  const usVoice=voices.find(v=>v.lang==='en-US'&&v.localService)
+    ||voices.find(v=>v.lang==='en-US')
+    ||voices.find(v=>v.lang.startsWith('en'));
+  if(usVoice) utter.voice=usVoice;
+  const orig=btn.textContent||'🔊';
+  utter.onstart=()=>{ btn.textContent='🔉'; };
+  utter.onend=()=>{ btn.textContent=orig; };
+  utter.onerror=()=>{ btn.textContent='🔇'; };
+  window.speechSynthesis.speak(utter);
+};
+function pronounceBtn(phrase){
+  const safe=(phrase||'').replace(/'/g,"&apos;").replace(/"/g,"&quot;");
+  return `<button class="pronounce-btn" title="Listen (American English)" onclick="fetchAndPlay(this,&quot;${safe}&quot;)">🔊</button>`;
+}
+
+function starBtn(card){
+  const starred=isStarred(card.phrase);
+  return `<button class="star-btn${starred?' starred':''}" title="Save for review" onclick="event.stopPropagation();handleStar(this)" data-phrase='${card.phrase.replace(/'/g,"&#39;")}'>⭐</button>`;
+}
+
+window.handleStar=function(btn){
+  const phrase=btn.dataset.phrase;
+  const card=allFlashcards.find(c=>c.phrase===phrase);
+  if(!card) return;
+  toggleStar(card);
+  btn.classList.toggle('starred', isStarred(phrase));
+};
+
+function buildItemHTML(item,colorClass){
+  const lv=item.level||'b1';
+  return `<div class="item-card ${colorClass}">
+    ${starBtn(item)}
+    <div class="item-phrase ${colorClass}">${item.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(item.phrase)}</div>
+    <div class="item-meaning">${item.meaning}</div>
+    <div class="item-example">${item.example}</div>
+  </div>`;
+}
+
+function buildSectionHTML(sec){
+  if(!sec) return '';
+  const c=sec.type;
+  const icon=c==='gen'?'🗣':'💼';
+  const label=c==='gen'?'General English':'Business English';
+  let h=`<div class="section-solo"><div class="section-pill ${c}">${icon} ${label}</div>`;
+  if(sec.ice) h+=`<div class="ice-breaker ${c}"><div class="ice-label">🧊 Ice Breaker</div><div class="ice-question">"${sec.ice.q}"</div><div class="ice-tip">${sec.ice.tip}</div></div>`;
+  if(sec.dialogue){
+    h+=`<div class="block-title" style="color:var(--${c})">💬 Dialogue</div><div class="dialogue-box"><div class="dialogue-header ${c}">${sec.dialogue.label}</div><div class="dialogue-lines">`;
+    sec.dialogue.lines.forEach(l=>{ h+=`<div class="line"><div class="spk ${l.cls}">${l.spk}</div><div class="line-text">${l.html}</div></div>`; });
+    h+=`</div></div>`;
+  }
+  const idioms=sec.items.filter(i=>i.type==='idiom');
+  if(idioms.length){ h+=`<div class="block-title" style="color:var(--${c})">🔥 Idioms</div><div class="item-list">`; idioms.forEach(i=>h+=buildItemHTML(i,c)); h+=`</div>`; }
+  const vocab=sec.items.filter(i=>i.type==='vocab');
+  if(vocab.length){ h+=`<div class="block-title" style="color:var(--${c})">📚 Vocabulary</div><div class="vocab-grid">`; vocab.forEach(i=>h+=buildItemHTML(i,c)); h+=`</div>`; }
+  const gram=sec.items.filter(i=>i.type==='grammar');
+  if(gram.length){ h+=`<div class="block-title" style="color:var(--${c})">📐 Grammar Point</div>`; gram.forEach(g=>{const lv=g.level||'b1'; h+=`<div class="grammar-box ${c}">${starBtn(g)}<div class="grammar-rule ${c}">${g.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(g.phrase)}</div><div class="grammar-body">${g.meaning}</div><div class="grammar-ex"><div class="right">✅ ${g.example}</div></div></div>`;});}
+  const collocs=sec.items.filter(i=>i.type==='colloc');
+  if(collocs.length){ h+=`<div class="block-title" style="color:var(--${c})">💎 Collocations</div><div class="colloc-grid">`; collocs.forEach(i=>h+=buildItemHTML(i,c)); h+=`</div>`; }
+  if(sec.nice){ h+=`<div class="block-title" style="color:var(--${c})">✨ Nice Points</div><div class="nice-box">`; sec.nice.forEach(n=>{ h+=`<div class="nice-item">${n}</div>`; }); h+=`</div>`; }
+  const power=sec.items.find(i=>i.type==='power');
+  if(power){ h+=`<div class="block-title" style="color:var(--${c})">⚡ Power Phrase <span class="level-badge ${power.level||'b1'}">${(power.level||'b1').toUpperCase()}</span></div><div class="power-phrase ${c}"><div class="power-label">${power.meaning}</div><div class="power-text">${power.example}</div></div>`; }
+  h+=`</div>`;
+  return h;
+}
+
+function buildDayCardHTML(day,mode){
+  const lvl=day.level||'b1';
+  const lvlLabel={'b1':'Intermediate','b1-b2':'Upper Intermediate','b2':'Upper Intermediate','c1':'Advanced'};
+  const topics=(day.topics||'').split(',').map(t=>`<span class="topic-tag">${t.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</span>`).join('');
+  const inner=mode==='gen'?buildSectionHTML(day.gen):buildSectionHTML(day.biz);
+  const uid=`body-${mode}-${day.num}`;
+  return `<div class="day-card" data-day="${day.num}" data-level="${day.level}" data-topics="${day.topics}">
+    <div class="day-header">
+      <div>
+        <div class="day-label">Day ${day.num}</div>
+        <div class="day-title">${day.title}</div>
+        <div class="day-meta"><span class="day-level ${lvl}">📊 ${(day.level||'b1').toUpperCase().replace('-','–')} — ${lvlLabel[day.level]||'Intermediate'}</span>${topics}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;">
+        <div class="day-date">📅 ${day.date}</div>
+        <button class="day-toggle" onclick="toggleDay('${uid}',this)">▲ Collapse</button>
+      </div>
+    </div>
+    <div class="day-body" id="${uid}" style="max-height:8000px;opacity:1;">${inner}</div>
+  </div>`;
+}
+
+// Inject content
+const genContainer=document.getElementById('genContainer');
+const bizContainer=document.getElementById('bizContainer');
+allDays.forEach(day=>{
+  genContainer.insertAdjacentHTML('beforeend',buildDayCardHTML(day,'gen'));
+  bizContainer.insertAdjacentHTML('beforeend',buildDayCardHTML(day,'biz'));
+});
+
+// ═══════════════════════════════════════
+//  STATS
+// ═══════════════════════════════════════
+function updateSavedStats(){
+  const n=getSaved().length;
+  document.getElementById('stat-saved').textContent=n;
+  const hcSaved=document.getElementById('hc-saved-count');
+  if(hcSaved) hcSaved.textContent=n+' starred';
+}
+function updateStats(){
+  const days=allDays.length, fc=allFlashcards;
+  document.getElementById('stat-days').textContent=days;
+  document.getElementById('stat-idioms').textContent=fc.filter(i=>i.type==='idiom').length;
+  document.getElementById('stat-collocs').textContent=fc.filter(i=>i.type==='colloc').length;
+  document.getElementById('stat-vocab').textContent=fc.filter(i=>i.type==='vocab').length;
+  document.getElementById('stat-grammar').textContent=fc.filter(i=>i.type==='grammar').length;
+  document.getElementById('navDayBadge').textContent='Day '+days;
+  document.getElementById('hc-gen-count').textContent=days+' episode'+(days!==1?'s':'');
+  document.getElementById('hc-biz-count').textContent=days+' episode'+(days!==1?'s':'');
+  const todayCards=getTodayCards();
+  document.getElementById('hc-fc-count').textContent=todayCards.length+' cards today';
+  updateSavedStats();
+}
+updateStats();
+
+function refreshStarButtons(){
+  document.querySelectorAll('.star-btn').forEach(btn=>{
+    btn.classList.toggle('starred', isStarred(btn.dataset.phrase));
+  });
+}
+refreshStarButtons();
+
+// ═══════════════════════════════════════
+//  EXPAND / COLLAPSE
+// ═══════════════════════════════════════
+window.toggleDay=function(uid,btn){
+  const body=document.getElementById(uid);
+  if(!body) return;
+  const isCollapsed=body.classList.contains('collapsed');
+  if(isCollapsed){
+    body.style.maxHeight=body.scrollHeight+'px';
+    body.classList.remove('collapsed');
+    btn.textContent='▲ Collapse';
+    // after transition, remove max-height cap so content can grow
+    body.addEventListener('transitionend',()=>{ if(!body.classList.contains('collapsed')) body.style.maxHeight='8000px'; },{once:true});
+  } else {
+    body.style.maxHeight=body.scrollHeight+'px';
+    // force reflow
+    body.offsetHeight;
+    body.style.maxHeight='0';
+    body.classList.add('collapsed');
+    btn.textContent='▼ Expand';
+  }
+};
+
+// ═══════════════════════════════════════
+//  ROUTING
+// ═══════════════════════════════════════
+function navigate(hash){
+  const key=(hash||'').replace('#','').toLowerCase()||'home';
+  const pageMap={home:'home',general:'general',business:'business',flashcards:'flashcards',saved:'saved',grammar:'grammar',mine:'mine'};
+  const pageId='page-'+(pageMap[key]||'home');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById(pageId);
+  if(pg) pg.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.toggle('active',t.dataset.page===key));
+  if(key==='flashcards') initDeck();
+  if(key==='saved') renderSavedPage();
+  if(key==='mine'){ syncProcessedWords(); renderMyWords(); }
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',()=>navigate(location.hash));
+navigate(location.hash);
+document.querySelectorAll('.home-card,.nav-tab').forEach(el=>{
+  el.addEventListener('click',e=>{e.preventDefault();const h=el.getAttribute('href');history.pushState(null,'',h);navigate(h);});
+});
+
+// ═══════════════════════════════════════
+//  FILTERS
+// ═══════════════════════════════════════
+function setupFilters(barId,containerId,noResultsId,searchId){
+  const bar=document.getElementById(barId),container=document.getElementById(containerId),noRes=document.getElementById(noResultsId),search=document.getElementById(searchId);
+  const state={level:'all',topic:'all',day:'all',search:''};
+  const topicSet=new Set(),dayNums=[];
+  container.querySelectorAll('.day-card').forEach(card=>{
+    (card.dataset.topics||'').split(',').forEach(t=>t&&topicSet.add(t.trim()));
+    dayNums.push(card.dataset.day);
+  });
+  const tg=bar.querySelector('[id$="TopicGroup"]');
+  topicSet.forEach(topic=>{const b=document.createElement('button');b.className='fbtn';b.dataset.f='topic';b.dataset.v=topic;b.textContent=topic.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());tg.appendChild(b);});
+  const dg=bar.querySelector('[id$="DayGroup"]');
+  [...new Set(dayNums)].sort((a,b)=>+a-+b).forEach(d=>{const b=document.createElement('button');b.className='fbtn';b.dataset.f='day';b.dataset.v=d;b.textContent='Day '+d;dg.appendChild(b);});
+  function apply(){
+    let vis=0;
+    container.querySelectorAll('.day-card').forEach(card=>{
+      const show=(state.day==='all'||card.dataset.day===state.day)&&(state.level==='all'||card.dataset.level===state.level)&&(state.topic==='all'||(card.dataset.topics||'').split(',').includes(state.topic))&&(!state.search||card.textContent.toLowerCase().includes(state.search.toLowerCase()));
+      card.classList.toggle('hidden',!show);
+      if(show) vis++;
+    });
+    noRes.style.display=vis===0?'block':'none';
+  }
+  bar.addEventListener('click',e=>{const btn=e.target.closest('.fbtn');if(!btn||!btn.dataset.f) return;state[btn.dataset.f]=btn.dataset.v;bar.querySelectorAll(`.fbtn[data-f="${btn.dataset.f}"]`).forEach(b=>b.classList.remove('active'));btn.classList.add('active');apply();});
+  search.addEventListener('input',e=>{state.search=e.target.value;apply();});
+}
+setupFilters('genFilterBar','genContainer','genNoResults','genSearch');
+setupFilters('bizFilterBar','bizContainer','bizNoResults','bizSearch');
+
+// ═══════════════════════════════════════
+//  SAVED PAGE
+// ═══════════════════════════════════════
+let savedTypeFilter='all';
+function renderSavedPage(){
+  const saved=getSaved();
+  const container=document.getElementById('savedContainer');
+  const empty=document.getElementById('savedEmpty');
+  const filtered=savedTypeFilter==='all'?saved:saved.filter(c=>c.type===savedTypeFilter);
+  if(filtered.length===0){
+    empty.style.display='block';
+    container.querySelectorAll('.saved-item').forEach(el=>el.remove());
+    return;
+  }
+  empty.style.display='none';
+  container.querySelectorAll('.saved-item').forEach(el=>el.remove());
+  const typeLbl={idiom:'Idiom',vocab:'Vocab',colloc:'Collocation',grammar:'Grammar',power:'Power Phrase'};
+  filtered.forEach(card=>{
+    const c=card.section||'gen';
+    const lv=card.level||'b1';
+    const div=document.createElement('div');
+    div.className=`saved-item ${c}-item`;
+    div.innerHTML=`<button class="saved-remove" title="Remove" onclick="removeSaved('${card.phrase.replace(/'/g,"&#39;")}')">⭐</button>
+      <div class="saved-item-phrase ${c}">${card.phrase}</div>
+      <div class="saved-item-meaning">${card.meaning}</div>
+      <div class="saved-item-example">${card.example}</div>
+      <div class="saved-item-meta">
+        <span class="level-badge ${lv}">${lv.toUpperCase()}</span>
+        <span class="topic-tag">${typeLbl[card.type]||card.type}</span>
+        <span class="topic-tag">Day ${card.day}</span>
+        <span class="topic-tag">${c==='gen'?'🗣 General':'💼 Business'}</span>
+      </div>`;
+    container.appendChild(div);
+  });
+  updateSavedStats();
+}
+window.removeSaved=function(phrase){
+  let saved=getSaved();
+  saved=saved.filter(s=>s.phrase!==phrase);
+  setSaved(saved);
+  renderSavedPage();
+  refreshStarButtons();
+  updateSavedStats();
+};
+document.getElementById('savedFilterBar').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-sf]');
+  if(!btn) return;
+  savedTypeFilter=btn.dataset.sf;
+  document.querySelectorAll('[data-sf]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSavedPage();
+});
+
+// ═══════════════════════════════════════
+//  FLASHCARD ENGINE
+// ═══════════════════════════════════════
+let deck=[],deckIndex=0,knownCount=0,currentCard=null;
+const fcState={deck:'today',type:'all',section:'all'};
+
+function getTodayCards(){ const maxDay=Math.max(...allDays.map(d=>+d.num)); return allFlashcards.filter(c=>+c.day===maxDay); }
+function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]); }
+
+function getFilteredCards(){
+  let cards;
+  if(fcState.deck==='saved') cards=[...getSaved()];
+  else if(fcState.deck==='today') cards=getTodayCards();
+  else cards=[...allFlashcards];
+  if(fcState.type!=='all') cards=cards.filter(c=>c.type===fcState.type);
+  if(fcState.section!=='all') cards=cards.filter(c=>c.section===fcState.section);
+  return shuffle(cards);
+}
+
+function initDeck(){
+  deck=getFilteredCards(); deckIndex=0; knownCount=0; currentCard=null;
+  document.getElementById('fcResult').classList.remove('show');
+  document.getElementById('fcEmpty').style.display='none';
+  document.getElementById('fcCardWrap').style.display='block';
+  document.getElementById('fcProgressWrap').style.display='block';
+  document.getElementById('fcActions').style.display='none';
+  if(deck.length===0){
+    document.getElementById('fcEmpty').style.display='block';
+    document.getElementById('fcCardWrap').style.display='none';
+    document.getElementById('fcProgressWrap').style.display='none';
+  } else { showCard(0); }
+}
+
+function showCard(idx){
+  currentCard=deck[idx];
+  if(!currentCard) return;
+  document.getElementById('fcCard').classList.remove('flipped');
+  document.getElementById('fcActions').style.display='none';
+  const typeLbl={idiom:'Idiom',vocab:'Vocabulary',colloc:'Collocation',grammar:'Grammar',power:'Power Phrase'};
+  const tc=currentCard.type;
+  ['fcTypeBadge','fcTypeBadge2'].forEach(id=>{ const el=document.getElementById(id); el.className=`fc-type-badge ${tc}`; el.textContent=typeLbl[tc]||tc; });
+  document.getElementById('fcPhrase').textContent=currentCard.phrase;
+  document.getElementById('fcMeaning').textContent=currentCard.meaning;
+  document.getElementById('fcExample').textContent=currentCard.example;
+  const lv=currentCard.level||'b1';
+  document.getElementById('fcLevelHint').innerHTML=`<span class="level-badge ${lv}">${lv.toUpperCase()}</span> Day ${currentCard.day} · ${currentCard.section==='gen'?'🗣 General':'💼 Business'}`;
+  const saveBtn=document.getElementById('fcSaveBtn');
+  saveBtn.textContent=isStarred(currentCard.phrase)?'★ Saved':'⭐ Save';
+  updateProgress();
+}
+
+function updateProgress(){
+  const total=deck.length,idx=deckIndex;
+  document.getElementById('fcProgressLabel').textContent=`Card ${Math.min(idx+1,total)} of ${total}`;
+  document.getElementById('fcProgressScore').textContent=`✓ ${knownCount} known`;
+  document.getElementById('fcProgressFill').style.width=total?`${(idx/total)*100}%`:'0%';
+}
+
+window.flipCard=function(){
+  const card=document.getElementById('fcCard');
+  if(!card.classList.contains('flipped')){
+    card.classList.add('flipped');
+    document.getElementById('fcActions').style.display='flex';
+  }
+};
+window.markCard=function(verdict){
+  if(verdict==='know'){
+    knownCount++;
+    nextCard();
+  } else {
+    // "Again" — re-insert card 3 positions ahead (or at end) so user sees it again
+    const insertAt=Math.min(deckIndex+3, deck.length);
+    deck.splice(insertAt, 0, currentCard);
+    nextCard();
+  }
+};
+window.nextCard=function(){ deckIndex++; if(deckIndex>=deck.length){ showResult(); return; } showCard(deckIndex); };
+window.saveCurrentCard=function(){
+  if(!currentCard) return;
+  toggleStar(currentCard);
+  const btn=document.getElementById('fcSaveBtn');
+  btn.textContent=isStarred(currentCard.phrase)?'★ Saved':'⭐ Save';
+};
+function showResult(){
+  document.getElementById('fcCardWrap').style.display='none';
+  document.getElementById('fcActions').style.display='none';
+  document.getElementById('fcProgressWrap').style.display='none';
+  const pct=deck.length?Math.round((knownCount/deck.length)*100):0;
+  document.getElementById('fcScore').textContent=pct+'%';
+  document.getElementById('fcMsg').textContent=pct>=90?'🔥 Excellent! You nailed it!':pct>=70?'💪 Great work — keep it up!':pct>=50?'👍 Good effort. Review the rest!':'📚 Keep practising — it gets easier!';
+  document.getElementById('fcResult').classList.add('show');
+}
+window.restartDeck=function(){ initDeck(); };
+
+// ═══════════════════════════════════════
+//  GRAMMAR PAGE
+// ═══════════════════════════════════════
+function buildGrammarPage(){
+  const container=document.getElementById('gramContainer');
+  const gramCards=allFlashcards.filter(c=>c.type==='grammar');
+  if(!gramCards.length) return;
+  gramCards.forEach(g=>{
+    const c=g.section||'gen';
+    const lv=g.level||'b1';
+    const div=document.createElement('div');
+    div.className=`gram-card ${c}`;
+    div.dataset.section=c;
+    div.dataset.level=lv;
+    div.innerHTML=`
+      ${starBtn(g)}
+      <div class="gram-card-rule ${c}">${g.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(g.phrase)}</div>
+      <div class="gram-card-body">${g.meaning}</div>
+      <div class="gram-card-ex">✅ ${g.example}</div>
+      <div class="gram-card-meta">
+        <span class="topic-tag">${c==='gen'?'🗣 General':'💼 Business'}</span>
+        <span class="topic-tag">Day ${g.day}</span>
+      </div>`;
+    container.appendChild(div);
+  });
+  // Filter bar
+  let gfSection='all', gfLevel='all';
+  function applyGramFilter(){
+    let vis=0;
+    container.querySelectorAll('.gram-card').forEach(el=>{
+      const show=(gfSection==='all'||el.dataset.section===gfSection)&&(gfLevel==='all'||el.dataset.level===gfLevel);
+      el.style.display=show?'':'none';
+      if(show) vis++;
+    });
+    document.getElementById('gramNoResults').style.display=vis===0?'block':'none';
+  }
+  document.getElementById('gramFilterBar').addEventListener('click',e=>{
+    const btn=e.target.closest('.fc-ctrl-btn');
+    if(!btn) return;
+    if(btn.dataset.gf!==undefined){
+      gfSection=btn.dataset.gf;
+      document.querySelectorAll('[data-gf]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    if(btn.dataset.glvl!==undefined){
+      gfLevel=btn.dataset.glvl;
+      document.querySelectorAll('[data-glvl]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    applyGramFilter();
+  });
+}
+buildGrammarPage();
+
+// ═══════════════════════════════════════
+//  MY WORDS PAGE
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+//  REAL-TIME WORD LOOKUP
+// ═══════════════════════════════════════
+const CEFR_COMMON = new Set('good,bad,big,small,new,old,work,get,make,know,take,see,come,think,look,want,give,use,find,tell,ask,feel,try,keep,turn,show,hear,play,run,move,live,write,sit,stand,pay,meet,change,lead,watch,follow,stop,speak,read,spend,grow,open,walk,win,buy,wait,die,send,build,stay,fall,cut,reach,pass,sell,decide,pull,talk,start,help,need,go,say,do,have,be,can,will,would,could,should,may,might,must,let,put,set,become,leave,bring,happen,learn,remember,understand,believe,appear,hold,break,carry,raise,allow,include,continue,suggest,report'.split(','));
+
+function estimateCEFR(word){
+  const w=word.toLowerCase().trim().split(' ')[0];
+  if(CEFR_COMMON.has(w)||w.length<=3) return 'a2';
+  if(w.length<=5) return 'b1';
+  if(w.length<=8) return 'b2';
+  return 'c1';
+}
+function posToType(pos){
+  if(!pos) return 'vocab';
+  const p=pos.toLowerCase();
+  if(p==='noun'||p==='verb'||p==='adjective'||p==='adverb') return 'vocab';
+  if(p==='phrase'||p==='idiom'||p==='interjection') return 'idiom';
+  return 'vocab';
+}
+
+let lookupTimeout=null;
+window._lookupPhonetic='';
+window._lookupAudio='';
+
+window.playAudio=function(url){
+  if(!url) return;
+  try{ new Audio(url).play(); }catch(e){}
+};
+
+async function lookupWord(raw){
+  const statusEl=document.getElementById('lookupStatus');
+  const word=raw.trim();
+  if(!word){ statusEl.innerHTML=''; return; }
+
+  window._lookupPhonetic='';
+  window._lookupAudio='';
+
+  statusEl.className='lookup-status loading';
+  statusEl.innerHTML='<span class="lookup-spinner"></span> Looking up…';
+
+  try{
+    const res=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.toLowerCase())}`);
+    if(!res.ok) throw new Error('not found');
+    const data=await res.json();
+    if(!Array.isArray(data)||!data.length) throw new Error('empty');
+
+    const entry=data[0];
+
+    // ── Pronunciation: prefer US English audio ──
+    const phonetics=entry.phonetics||[];
+    const usP=phonetics.find(p=>p.audio&&(p.audio.includes('-us')||p.audio.includes('-us.')));
+    const anyP=phonetics.find(p=>p.audio);
+    const chosen=usP||anyP||phonetics.find(p=>p.text)||phonetics[0]||{};
+    const phonetic=chosen.text||entry.phonetic||'';
+    const audioUrl=chosen.audio||'';
+    window._lookupPhonetic=phonetic;
+    window._lookupAudio=audioUrl;
+
+    // ── Best definition + example across all meanings ──
+    let bestDef=null, bestExample=null, bestPos=null;
+    for(const m of (entry.meanings||[])){
+      for(const d of (m.definitions||[])){
+        if(!bestDef && d.definition){ bestDef=d.definition; bestPos=m.partOfSpeech; }
+        if(!bestExample && d.example){ bestExample=d.example; }
+        if(bestDef && bestExample) break;
+      }
+      if(bestDef && bestExample) break;
+    }
+
+    // Fill meaning
+    const meaningEl=document.getElementById('mineMeaning');
+    if(!meaningEl.value && bestDef){ meaningEl.value=bestDef; meaningEl.classList.add('filled'); }
+    // Fill example
+    const exampleEl=document.getElementById('mineExample');
+    if(!exampleEl.value && bestExample){ exampleEl.value=bestExample; exampleEl.classList.add('filled'); }
+    // Auto type
+    const typeEl=document.getElementById('mineType');
+    if(typeEl.value==='auto' && bestPos) typeEl.value=posToType(bestPos);
+    // Auto level
+    const levelEl=document.getElementById('mineLevel');
+    if(levelEl.value==='auto') levelEl.value=estimateCEFR(word);
+
+    const partLabel=bestPos?` · <em>${bestPos}</em>`:'';
+    const phoneticHtml=phonetic?`<span class="mine-phonetic">${phonetic}</span>`:'';
+    const audioBtn=audioUrl?`<button class="play-btn" onclick="playAudio('${audioUrl}')">🔊 Listen</button>`:'';
+    statusEl.className='lookup-status success';
+    statusEl.innerHTML=`✓ Found${partLabel} ${phoneticHtml} ${audioBtn} <span class="auto-badge">auto-filled</span>`;
+
+  } catch(e){
+    // Multi-word = likely idiom or phrase
+    const wordCount=word.trim().split(/\s+/).length;
+    if(wordCount>1){
+      document.getElementById('mineType').value='idiom';
+      document.getElementById('mineLevel').value=document.getElementById('mineLevel').value==='auto'?'b1':document.getElementById('mineLevel').value;
+      statusEl.className='lookup-status error';
+      statusEl.innerHTML='💡 Phrase not in dictionary — set as <strong>Idiom</strong>. Add the meaning yourself or Claude fills it tonight.';
+    } else {
+      statusEl.className='lookup-status error';
+      statusEl.innerHTML='⚠ Not found — fill meaning below or Claude processes it tonight.';
+    }
+  }
+}
+
+// Trigger lookup automatically as user types (800ms debounce) or on blur
+(function attachLookup(){
+  const phraseEl=document.getElementById('minePhrase');
+  if(!phraseEl) return;
+  phraseEl.addEventListener('blur',()=>{ clearTimeout(lookupTimeout); if(phraseEl.value.trim()) lookupWord(phraseEl.value); });
+  phraseEl.addEventListener('input',()=>{
+    clearTimeout(lookupTimeout);
+    document.getElementById('lookupStatus').innerHTML='';
+    ['mineMeaning','mineExample'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el.classList.contains('filled')){ el.value=''; el.classList.remove('filled'); }
+    });
+    document.getElementById('mineType').value='auto';
+    document.getElementById('mineLevel').value='auto';
+    if(phraseEl.value.trim().length>2)
+      lookupTimeout=setTimeout(()=>lookupWord(phraseEl.value),800);
+  });
+})();
+
+function getMy(){ try{ return JSON.parse(localStorage.getItem('cto_mywords')||'[]'); }catch(e){ return []; } }
+function setMy(arr){ try{ localStorage.setItem('cto_mywords',JSON.stringify(arr)); }catch(e){} }
+
+// Auto-sync: compare localStorage pending words against processed words already in #userWords
+function syncProcessedWords(){
+  const userWordEls=document.querySelectorAll('#userWords [data-user="true"]');
+  if(!userWordEls.length) return;
+  // Build set of processed phrases (strip outer quotes, lowercase)
+  const processedPhrases=new Set();
+  userWordEls.forEach(el=>{
+    const p=(el.dataset.phrase||'').replace(/^["']|["']$/g,'').toLowerCase().trim();
+    if(p) processedPhrases.add(p);
+  });
+  let mine=getMy(), changed=false;
+  mine=mine.map(card=>{
+    if(card.status==='pending'){
+      const key=card.phrase.replace(/^["']|["']$/g,'').toLowerCase().trim();
+      if(processedPhrases.has(key)){
+        // find the processed card data from HTML
+        const el=Array.from(userWordEls).find(e=>(e.dataset.phrase||'').replace(/^["']|["']$/g,'').toLowerCase().trim()===key);
+        if(el){
+          return {...card, status:'processed',
+            meaning:el.dataset.meaning||card.meaning,
+            example:el.dataset.example||card.example,
+            type:el.dataset.type!=='auto'?el.dataset.type:card.type,
+            section:el.dataset.section!=='auto'?el.dataset.section:card.section,
+            level:el.dataset.level!=='auto'?el.dataset.level:card.level,
+            phonetic:el.dataset.phonetic||card.phonetic||'',
+            audioUrl:el.dataset.audio||card.audioUrl||''};
+        }
+      }
+    }
+    return card;
+  });
+  setMy(mine);
+}
+
+window.addMyWord=function(){
+  const phrase=document.getElementById('minePhrase').value.trim();
+  if(!phrase){ document.getElementById('minePhrase').focus(); return; }
+  const meaning=document.getElementById('mineMeaning').value.trim();
+  const example=document.getElementById('mineExample').value.trim();
+  const card={
+    id:'mine_'+Date.now(),
+    phrase,
+    meaning,
+    example,
+    context:document.getElementById('mineContext').value.trim()||'',
+    type:document.getElementById('mineType').value,
+    section:document.getElementById('mineSection').value,
+    level:document.getElementById('mineLevel').value,
+    phonetic:window._lookupPhonetic||'',
+    audioUrl:window._lookupAudio||'',
+    status: meaning ? 'processed' : 'pending',
+    addedAt:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+  };
+  const all=getMy();
+  all.unshift(card);
+  setMy(all);
+  syncProcessedWords();
+  // Clear form
+  ['minePhrase','mineMeaning','mineExample','mineContext'].forEach(id=>document.getElementById(id).value='');
+  ['mineType','mineSection','mineLevel'].forEach(id=>document.getElementById(id).value='auto');
+  renderMyWords();
+  document.getElementById('mineExportBtn').style.display='block';
+  // Flash confirmation
+  const btn=document.querySelector('.mine-add-btn');
+  btn.textContent='✓ Added!';
+  setTimeout(()=>btn.textContent='➕ Add to My Words',1500);
+};
+
+window.deleteMyWord=function(id){
+  const all=getMy().filter(c=>c.id!==id);
+  setMy(all);
+  renderMyWords();
+};
+
+// Retry dictionary lookup for a pending card — updates it to processed if found
+window.retryLookup=async function(id){
+  const all=getMy();
+  const card=all.find(c=>c.id===id);
+  if(!card) return;
+  const cardEl=document.getElementById('mc_'+id);
+  const retryBtn=cardEl&&cardEl.querySelector('[onclick*="retryLookup"]');
+  if(retryBtn){ retryBtn.textContent='⏳ Looking up…'; retryBtn.disabled=true; }
+  try{
+    const word=card.phrase.trim().toLowerCase();
+    const res=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+    if(!res.ok) throw new Error('not found');
+    const data=await res.json();
+    if(!Array.isArray(data)||!data.length) throw new Error('empty');
+    const entry=data[0];
+    const phonetics=entry.phonetics||[];
+    const usP=phonetics.find(p=>p.text&&p.audio&&p.audio.includes('-us'));
+    const anyP=phonetics.find(p=>p.text)||phonetics[0];
+    const phonetic=(usP||anyP||{}).text||'';
+    const audioUrl=(phonetics.find(p=>p.audio&&p.audio.includes('-us'))||phonetics.find(p=>p.audio)||{}).audio||'';
+    let def='', ex='', pos='';
+    if(entry.meanings&&entry.meanings.length){
+      const m=entry.meanings[0];
+      pos=m.partOfSpeech||'';
+      if(m.definitions&&m.definitions.length){
+        def=m.definitions[0].definition||'';
+        ex=m.definitions[0].example||'';
+      }
+    }
+    if(!def) throw new Error('no definition');
+    const updated=all.map(c=>c.id===id?{...c,
+      status:'processed',
+      meaning:def,
+      example:ex||c.example,
+      phonetic:phonetic||c.phonetic,
+      audioUrl:audioUrl||c.audioUrl,
+      type:c.type==='auto'?posToType(pos):c.type,
+      level:c.level==='auto'?estimateLevel(card.phrase):c.level
+    }:c);
+    setMy(updated);
+    renderMyWords();
+  }catch(e){
+    if(retryBtn){ retryBtn.textContent='❌ Not found'; setTimeout(()=>{ retryBtn.textContent='🔍 Try lookup'; retryBtn.disabled=false; },2000); }
+  }
+};
+
+function renderMyWords(){
+  const all=getMy();
+  const pending=all.filter(c=>c.status==='pending');
+  const processed=all.filter(c=>c.status==='processed');
+  const typeLbl={idiom:'🔥 Idiom',vocab:'📚 Vocab',colloc:'💎 Colloc',grammar:'📐 Grammar',auto:'🤖 Auto'};
+  const secLbl={gen:'🗣 General',biz:'💼 Business',auto:'🤖 Auto'};
+  function buildCard(c){
+    const lv=c.level!=='auto'?`<span class="level-badge ${c.level}">${c.level.toUpperCase()}</span>`:'';
+    const phoneticHtml=c.phonetic?`<span class="mine-phonetic">${c.phonetic}</span>`:'';
+    const safePhrase=(c.phrase||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    const speakBtn=`<button class="pronounce-btn" title="Listen" onclick="fetchAndPlay(this,'${safePhrase}')">🔊</button>`;
+    const retryBtn=c.status==='pending'?`<button onclick="retryLookup('${c.id}')" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(108,99,255,.12);color:var(--accent);border:1px solid rgba(108,99,255,.3);cursor:pointer;margin-left:4px">🔍 Try lookup</button>`:'';
+    return `<div class="mine-card ${c.status}" id="mc_${c.id}">
+      <button class="mine-delete" onclick="deleteMyWord('${c.id}')" title="Remove">✕</button>
+      <div class="mine-card-phrase">${c.phrase} ${phoneticHtml} ${speakBtn}</div>
+      <div class="mine-card-meaning">${c.meaning||'<span style="color:var(--accent3);font-style:italic">Meaning pending — tap 🔍 Try lookup or wait for overnight processing.</span>'}</div>
+      <div class="mine-card-example">${c.example?`<em>${c.example}</em>`:''}</div>
+      ${c.context?`<div style="font-size:11px;color:var(--muted);margin-top:4px">📌 ${c.context}</div>`:''}
+      <div class="mine-card-meta">
+        ${c.status==='pending'?`<span class="pending-badge">⏳ Pending</span>${retryBtn}`:'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(0,210,160,.12);color:var(--biz);border:1px solid rgba(0,210,160,.3)">✅ Ready</span>'}
+        ${lv}
+        <span class="topic-tag">${typeLbl[c.type]||c.type}</span>
+        <span class="topic-tag">${secLbl[c.section]||c.section}</span>
+        <span class="topic-tag">📅 ${c.addedAt}</span>
+      </div>
+    </div>`;
+  }
+  const pendingEl=document.getElementById('minePendingSection');
+  const processedEl=document.getElementById('mineProcessedSection');
+  const emptyEl=document.getElementById('mineEmpty');
+  document.getElementById('minePendingList').innerHTML=pending.map(buildCard).join('');
+  document.getElementById('mineProcessedList').innerHTML=processed.map(buildCard).join('');
+  pendingEl.style.display=pending.length?'block':'none';
+  processedEl.style.display=processed.length?'block':'none';
+  emptyEl.style.display=all.length===0?'block':'none';
+  if(all.length>0) document.getElementById('mineExportBtn').style.display='block';
+}
+
+window.exportMyWords=function(){
+  const pending=getMy().filter(c=>c.status==='pending');
+  if(!pending.length){ alert('No pending words to export!'); return; }
+  const blob=new Blob([JSON.stringify(pending,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='my-words.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  // Show instruction
+  setTimeout(()=>alert('📥 my-words.json downloaded!\n\nSave it to your English folder:\n/Documents/Claude/English/my-words.json\n\nThen type to Claude: "process my pending words now"\nto get them processed immediately — no need to wait until 9am.'),300);
+};
+
+syncProcessedWords();
+renderMyWords();
+
+// Flashcard filter buttons
+document.getElementById('page-flashcards').addEventListener('click',e=>{
+  const btn=e.target.closest('.fc-ctrl-btn');
+  if(!btn) return;
+  if(btn.dataset.deck){ fcState.deck=btn.dataset.deck; document.querySelectorAll('.fc-ctrl-btn[data-deck]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(btn.dataset.deck==='saved') btn.classList.add('saved-fc'); }
+  if(btn.dataset.type!==undefined){ fcState.type=btn.dataset.type; document.querySelectorAll('.fc-ctrl-btn[data-type]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+  if(btn.dataset.section!==undefined){ fcState.section=btn.dataset.section; document.querySelectorAll('.fc-ctrl-btn[data-section]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(btn.dataset.section==='gen') btn.classList.add('gen-fc'); if(btn.dataset.section==='biz') btn.classList.add('biz-fc'); }
+  initDeck();
+});
+</script>
+</body>
+</html>
