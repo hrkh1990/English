@@ -1555,6 +1555,8 @@ window.addMyWord=function(){
   const btn=document.querySelector('.mine-add-btn');
   btn.textContent='✓ Added!';
   setTimeout(()=>btn.textContent='➕ Add to My Words',1500);
+  // Auto-push to GitHub if token is already saved
+  if(getGhToken()) setTimeout(syncToGitHub, 500);
 };
 
 window.deleteMyWord=function(id){
@@ -1698,7 +1700,27 @@ window.handleImportFile=function(e){
 syncProcessedWords();
 renderMyWords();
 
-// ── GitHub Sync — push my-words.json to repo so scheduled task can process ──
+// ── Auto-pull words from GitHub on every page load (public repo, no token needed) ──
+(async function autoLoadFromGitHub(){
+  try{
+    const url='https://raw.githubusercontent.com/hrkh1990/English/master/my-words.json?t='+Date.now();
+    const res=await fetch(url);
+    if(!res.ok) return; // no file yet — silent
+    const remote=await res.json();
+    if(!Array.isArray(remote)||!remote.length) return;
+    const local=getMy();
+    const localKeys=new Set(local.map(w=>w.id||(w.phrase||'').toLowerCase().trim()));
+    const toAdd=remote.filter(w=>!localKeys.has(w.id||(w.phrase||'').toLowerCase().trim()));
+    if(toAdd.length){
+      setMy([...local,...toAdd]);
+      syncProcessedWords();
+      renderMyWords();
+      console.log('✅ Auto-loaded',toAdd.length,'word(s) from GitHub');
+    }
+  }catch(e){ /* offline or no file yet — silent */ }
+})();
+
+// ── GitHub Sync — push my-words.json to repo so other devices can auto-pull ──
 const GH_OWNER='hrkh1990', GH_REPO='English', GH_FILE='my-words.json';
 
 function getGhToken(){ return localStorage.getItem('cto_gh_token')||''; }
@@ -1738,7 +1760,7 @@ window.syncToGitHub=async function(){
       if(res.status===401){ localStorage.removeItem('cto_gh_token'); throw new Error('Token invalid — re-enter it'); }
       throw new Error('GitHub error '+res.status);
     }
-    setStatus('✅ Synced to GitHub! Scheduled task will process tonight at 9am.','var(--biz)');
+    setStatus('✅ Synced to GitHub! Open this page on any device to auto-load your words.','var(--biz)');
     btn.textContent='✅ Synced!';
     setTimeout(()=>{ btn.textContent=origTxt; btn.disabled=false; },3000);
   }catch(e){
