@@ -611,7 +611,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <div class="mine-section-title">✅ Processed — Ready to Study</div>
       <div id="mineProcessedList"></div>
     </div>
-    <div class="mine-empty" id="mineEmpty">No words yet. Add your first one above!</div>
+    <div class="mine-empty" id="mineEmpty">
+      <div style="font-size:32px;margin-bottom:12px">📭</div>
+      <div style="font-weight:700;color:var(--text);margin-bottom:8px">No words here yet</div>
+      <div style="font-size:13px;line-height:1.7">Add a new word above, or<br/>
+      if you added words on another device or browser,<br/>
+      use the <strong style="color:var(--biz)">📤 Import Words</strong> button to bring them here.</div>
+    </div>
   </div>
 </div>
 
@@ -904,33 +910,26 @@ function parseSection(secEl,type,dayNum){
 //  BUILD HTML HELPERS
 // ═══════════════════════════════════════
 // ── Pronunciation: Web Speech API — works offline, handles full phrases ──
-// Cache voices once loaded (async in Chrome/Firefox)
+// MUST be synchronous — async/await breaks Chrome's user-gesture context for speak()
 let _cachedVoices=[];
-function _getVoices(){
-  if(_cachedVoices.length) return Promise.resolve(_cachedVoices);
-  return new Promise(resolve=>{
-    const v=window.speechSynthesis.getVoices();
-    if(v.length){ _cachedVoices=v; resolve(v); return; }
-    window.speechSynthesis.addEventListener('voiceschanged',function onVC(){
-      _cachedVoices=window.speechSynthesis.getVoices();
-      resolve(_cachedVoices);
-    },{once:true});
-    setTimeout(()=>resolve(window.speechSynthesis.getVoices()),2000);
-  });
+function _loadVoices(){ const v=window.speechSynthesis.getVoices(); if(v.length) _cachedVoices=v; }
+if(window.speechSynthesis){
+  _loadVoices();
+  window.speechSynthesis.addEventListener('voiceschanged', _loadVoices);
 }
-if(window.speechSynthesis) _getVoices();
 
-window.fetchAndPlay=async function(btn, phrase){
+window.fetchAndPlay=function(btn, phrase){
   if(!phrase) return;
   const clean=phrase.replace(/^["']|["']$/g,'').trim();
   if(!clean) return;
-  if(!window.speechSynthesis){ btn.innerHTML='🔇 N/A'; return; }
+  if(!window.speechSynthesis){ btn.innerHTML='🔇'; return; }
   window.speechSynthesis.cancel();
   const utter=new SpeechSynthesisUtterance(clean);
   utter.lang='en-US';
   utter.rate=0.88;
   utter.pitch=1;
-  const voices=await _getVoices();
+  // Use pre-cached voices — loaded at page start via voiceschanged event
+  const voices=_cachedVoices.length ? _cachedVoices : window.speechSynthesis.getVoices();
   const usVoice=voices.find(v=>v.lang==='en-US'&&v.localService)
     ||voices.find(v=>v.lang==='en-US')
     ||voices.find(v=>v.lang.startsWith('en-'))
@@ -940,7 +939,7 @@ window.fetchAndPlay=async function(btn, phrase){
   const orig=btn.innerHTML;
   utter.onstart=()=>{ btn.innerHTML='🔉'; };
   utter.onend=()=>{ btn.innerHTML=orig; };
-  utter.onerror=(e)=>{ btn.innerHTML=orig; };
+  utter.onerror=()=>{ btn.innerHTML=orig; };
   window.speechSynthesis.speak(utter);
 };
 function pronounceBtn(phrase){
