@@ -591,7 +591,11 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
         </div>
       </div>
       <button class="mine-add-btn" onclick="addMyWord()">➕ Add to My Words</button>
-      <button class="mine-export-btn" onclick="exportMyWords()" id="mineExportBtn" style="display:none">📥 Export for Claude Processing (my-words.json)</button>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="mine-export-btn" onclick="exportMyWords()" id="mineExportBtn" style="display:none;flex:1;margin-top:0">📥 Export Words</button>
+        <button class="mine-export-btn" onclick="importMyWords()" style="flex:1;margin-top:0;border-color:rgba(0,210,160,.3);color:var(--biz)" id="mineImportBtn">📤 Import Words</button>
+      </div>
+      <input type="file" id="mineImportFile" accept=".json" style="display:none" onchange="handleImportFile(event)"/>
       <div class="mine-hint">
         <strong style="color:var(--biz)">⚡ Real-time lookup:</strong> Type any English word or phrase — meaning and example auto-fill instantly from the dictionary.<br/>
         If not found, fill the fields yourself and the card is saved as-is.
@@ -769,6 +773,70 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
+<div data-day="3" data-date="March 15, 2026" data-level="b2" data-topics="sunday-prep,reading,family,focus-time,deep-work" data-title="📖 Sunday Reset">
+  <div data-section="gen">
+    <div data-iceq="How do you like to spend your Sundays to feel ready for the week?" data-icetip="Try: 'I usually…' / 'I find it really helps to…' / 'Nothing sets me up better than…'"></div>
+    <div data-dialogue="true" data-dlabel="Daniel and his sister Maya — Sunday afternoon at a café" data-dtype="gen">
+      <div data-spk="Maya" data-spkclass="s3">You look <span class="hl-g">miles away</span>. What are you reading?</div>
+      <div data-spk="Daniel" data-spkclass="s2">Ha — sorry. This book on deep work. I keep <span class="hl-g">putting it off</span> during the week, so Sunday is the only time I can really <span class="hl-g">sink my teeth into it</span>.</div>
+      <div data-spk="Maya" data-spkclass="s3">I can never switch off on Sundays. My brain just <span class="hl-g">keeps running</span>.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Same. But I&apos;ve been <span class="hl-g">making a point of</span> protecting Sunday afternoons. No email, no Slack. Just <span class="hl-g">recharge the batteries</span>.</div>
+      <div data-spk="Maya" data-spkclass="s3">That&apos;s easier said than done with your job.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Honestly, yes. But if I <span class="hl-g">don&apos;t draw the line</span> somewhere, the week just swallows everything. I need at least one day to <span class="hl-g">catch my breath</span>.</div>
+      <div data-spk="Maya" data-spkclass="s3">Fair enough. Maybe I should <span class="hl-g">take a leaf out of your book</span>.</div>
+      <div data-spk="Daniel" data-spkclass="s2">Start small — just one distraction-free hour. You&apos;d be <span class="hl-g">surprised how much it helps</span>.</div>
+    </div>
+    <div data-type="idiom" data-section="gen" data-day="3" data-level="b2" data-phrase='"Miles away"' data-meaning="Deeply lost in thought; not paying attention to what is around you" data-example='"You were miles away — did you hear what I said?"'></div>
+    <div data-type="idiom" data-section="gen" data-day="3" data-level="b1" data-phrase='"Sink your teeth into something"' data-meaning="Engage with something challenging or interesting in a deep, focused way" data-example='"I finally had time to sink my teeth into that novel."'></div>
+    <div data-type="idiom" data-section="gen" data-day="3" data-level="b2" data-phrase='"Draw the line"' data-meaning="Set a limit on what you will accept or do" data-example='"I&apos;m flexible at work, but I draw the line at weekend calls."'></div>
+    <div data-type="idiom" data-section="gen" data-day="3" data-level="b1" data-phrase='"Take a leaf out of someone&apos;s book"' data-meaning="Copy or learn from someone&apos;s good example" data-example='"She&apos;s so organized — I should take a leaf out of her book."'></div>
+    <div data-type="idiom" data-section="gen" data-day="3" data-level="b1" data-phrase='"Catch your breath"' data-meaning="Take a moment to rest and recover from being busy or stressed" data-example='"Give me a minute — I just need to catch my breath."'></div>
+    <div data-type="vocab" data-section="gen" data-day="3" data-level="b2" data-phrase="recharge" data-meaning="Restore your energy and motivation after being tired or depleted" data-example='"A quiet Sunday walk always helps me recharge."'></div>
+    <div data-type="vocab" data-section="gen" data-day="3" data-level="b2" data-phrase="distraction-free" data-meaning="Without interruptions or things that take your attention away" data-example='"I need a distraction-free hour to finish this chapter."'></div>
+    <div data-type="vocab" data-section="gen" data-day="3" data-level="b1" data-phrase="switch off" data-meaning="Stop thinking about work or responsibilities; mentally relax" data-example='"I find it hard to switch off when there&apos;s a big deadline coming."'></div>
+    <div data-type="vocab" data-section="gen" data-day="3" data-level="b2" data-phrase="protective (of time)" data-meaning="Careful and deliberate about guarding something valuable from being taken" data-example='"She&apos;s very protective of her mornings — no meetings before 10."'></div>
+    <div data-type="vocab" data-section="gen" data-day="3" data-level="b2" data-phrase="swallow up" data-meaning="Absorb or consume something completely so it disappears" data-example='"The whole afternoon got swallowed up by admin tasks."'></div>
+    <div data-type="grammar" data-section="gen" data-day="3" data-level="b2" data-phrase='"Keep + -ing" vs "keep on + -ing"' data-meaning="Both mean a repeated or continuous action. &apos;Keep -ing&apos; is more common. &apos;Keep on&apos; adds slight emphasis or mild frustration." data-example='"I keep forgetting." / "She keeps on interrupting me in meetings." (mild frustration)'></div>
+    <div data-type="colloc" data-section="gen" data-day="3" data-level="b2" data-phrase="make a point of" data-meaning="Deliberately ensure you do something, even if it takes effort" data-example='"He makes a point of walking away from his desk at lunch."'></div>
+    <div data-type="colloc" data-section="gen" data-day="3" data-level="b1" data-phrase="put something off" data-meaning="Delay doing something until a later time" data-example='"Stop putting off that difficult conversation."'></div>
+    <div data-type="colloc" data-section="gen" data-day="3" data-level="b2" data-phrase="recharge the batteries" data-meaning="Rest and restore energy, especially after hard work" data-example='"A weekend away really helped me recharge the batteries."'></div>
+    <div data-type="colloc" data-section="gen" data-day="3" data-level="b2" data-phrase="easier said than done" data-meaning="Sounds simple but is actually quite difficult in practice" data-example='"Just stop worrying — easier said than done."'></div>
+    <div data-type="colloc" data-section="gen" data-day="3" data-level="b1" data-phrase="start small" data-meaning="Begin with a modest, manageable step rather than an ambitious one" data-example='"You don&apos;t need to run 10km on day one — start small."'></div>
+    <div data-type="power" data-section="gen" data-day="3" data-level="b2" data-phrase="Protecting Your Time Power Phrase" data-meaning="Use when explaining boundaries or self-care habits" data-example='"I make a point of protecting Sunday afternoons — if I don&apos;t draw the line somewhere, the week just swallows everything."'></div>
+    <div data-nice='["\"Miles away\" is far more vivid than just \"distracted\" or \"not listening\"","\"Make a point of\" shows deliberate intention — sounds very natural and native","Use \"easier said than done\" to acknowledge someone&apos;s difficulty without dismissing it","\"Swallows everything\" is a powerful image — try it instead of \"takes over\"","\"Start small\" is a confident, practical suggestion — far better than \"try a little\""]'></div>
+  </div>
+  <div data-section="biz">
+    <div data-iceq="Do you ever do any work prep on Sundays? What does that look like?" data-icetip="Try: 'I tend to…' / 'I find it useful to…' / 'The most valuable thing I do is…'"></div>
+    <div data-dialogue="true" data-dlabel="Daniel&apos;s Sunday evening — planning the week ahead" data-dtype="biz">
+      <div data-spk="Daniel" data-spkclass="s2">*Opens notebook* Okay — let me <span class="hl-b">map out</span> the week before it maps me.</div>
+      <div data-spk="Priya" data-spkclass="s1">You do this every Sunday?</div>
+      <div data-spk="Daniel" data-spkclass="s2">Most Sundays, yeah. I just <span class="hl-b">run through</span> my priorities, flag the things that are <span class="hl-b">time-sensitive</span>, and make sure I&apos;m not going into Monday <span class="hl-b">flying blind</span>.</div>
+      <div data-spk="Priya" data-spkclass="s1">What&apos;s on the radar for this week?</div>
+      <div data-spk="Daniel" data-spkclass="s2">The big one is the investor briefing on Wednesday. I need to <span class="hl-b">get my ducks in a row</span> on that. And I want to <span class="hl-b">carve out</span> time Tuesday for the architecture review — that&apos;s been <span class="hl-b">on the back burner</span> too long.</div>
+      <div data-spk="Priya" data-spkclass="s1">Should I block time on your calendar?</div>
+      <div data-spk="Daniel" data-spkclass="s2">Please do. Two hours, no interruptions. I need to <span class="hl-b">think things through</span> properly before that meeting.</div>
+    </div>
+    <div data-type="idiom" data-section="biz" data-day="3" data-level="b2" data-phrase='"Flying blind"' data-meaning="Making decisions or taking action without information or a clear plan" data-example='"Without the data, we&apos;re completely flying blind."'></div>
+    <div data-type="idiom" data-section="biz" data-day="3" data-level="b2" data-phrase='"Get your ducks in a row"' data-meaning="Organize everything properly before starting or presenting" data-example='"Before the pitch, make sure you&apos;ve got your ducks in a row."'></div>
+    <div data-type="idiom" data-section="biz" data-day="3" data-level="b1" data-phrase='"On the back burner"' data-meaning="Temporarily postponed because other priorities are more urgent" data-example='"The redesign has been on the back burner for two months."'></div>
+    <div data-type="idiom" data-section="biz" data-day="3" data-level="b2" data-phrase='"On the radar"' data-meaning="Noticed and being monitored; within your awareness or attention" data-example='"Is this client risk on your radar?"'></div>
+    <div data-type="idiom" data-section="biz" data-day="3" data-level="b2" data-phrase='"Think things through"' data-meaning="Consider a problem carefully and completely before deciding" data-example='"I need a quiet morning to think this through properly."'></div>
+    <div data-type="vocab" data-section="biz" data-day="3" data-level="b2" data-phrase="investor briefing" data-meaning="A formal update or presentation prepared for investors" data-example='"The investor briefing needs to show clear growth metrics."'></div>
+    <div data-type="vocab" data-section="biz" data-day="3" data-level="b2" data-phrase="architecture review" data-meaning="A structured evaluation of a system&apos;s technical design and infrastructure" data-example='"We schedule an architecture review before every major release."'></div>
+    <div data-type="vocab" data-section="biz" data-day="3" data-level="b1" data-phrase="time-sensitive" data-meaning="Requiring action by a specific deadline; urgent" data-example='"This is time-sensitive — we need a decision by Thursday."'></div>
+    <div data-type="vocab" data-section="biz" data-day="3" data-level="b2" data-phrase="block time" data-meaning="Reserve a specific period on a calendar to protect it for focused work" data-example='"I&apos;ve blocked two hours Thursday morning for deep work."'></div>
+    <div data-type="vocab" data-section="biz" data-day="3" data-level="b2" data-phrase="priorities" data-meaning="The most important tasks that must be done first or with most effort" data-example='"What are your top three priorities for this sprint?"'></div>
+    <div data-type="grammar" data-section="biz" data-day="3" data-level="b2" data-phrase='"Need to + verb" vs "I&apos;ll need to + verb"' data-meaning="'Need to' = immediate necessity now. 'I&apos;ll need to' = future necessity; more planned and professional in writing." data-example='"I need to handle this today." vs "I&apos;ll need to review that before Wednesday&apos;s call." (more formal, planned)'></div>
+    <div data-type="colloc" data-section="biz" data-day="3" data-level="b2" data-phrase="map out" data-meaning="Plan something in detail before beginning; lay out the structure" data-example='"Let&apos;s map out the rollout plan before we commit."'></div>
+    <div data-type="colloc" data-section="biz" data-day="3" data-level="b1" data-phrase="run through" data-meaning="Quickly review or check a list, plan, or set of items" data-example='"Can we run through the agenda before the meeting starts?"'></div>
+    <div data-type="colloc" data-section="biz" data-day="3" data-level="b2" data-phrase="carve out time" data-meaning="Deliberately make space in a busy schedule for a specific task" data-example='"I&apos;ve carved out two hours Friday for strategic thinking."'></div>
+    <div data-type="colloc" data-section="biz" data-day="3" data-level="b2" data-phrase="go into something prepared" data-meaning="Enter a meeting, presentation, or situation with full readiness" data-example='"Never go into a board meeting unprepared."'></div>
+    <div data-type="colloc" data-section="biz" data-day="3" data-level="b2" data-phrase="no interruptions" data-meaning="A block of time reserved so that no one disturbs your focus" data-example='"I have a no-interruptions policy on Friday mornings."'></div>
+    <div data-type="power" data-section="biz" data-day="3" data-level="b2" data-phrase="Weekly Planning Power Phrase" data-meaning="Use in any planning conversation or 1:1" data-example='"I want to carve out time for the architecture review — it&apos;s been on the back burner too long, and I need to think it through properly before Wednesday."'></div>
+    <div data-nice='["\"Map out the week before it maps me\" — memorable, confident framing of weekly planning","\"Flying blind\" = no data / no plan — great image for business contexts","Use \"on the back burner\" + \"carve out time\" together to signal intentional prioritization","\"Block time\" is standard professional vocab — use it freely in calendar and async comms","\"Get your ducks in a row\" works great before high-stakes presentations or client meetings"]'></div>
+  </div>
+</div>
+
 </div><!-- end dataSource -->
 
 <script>
@@ -836,32 +904,43 @@ function parseSection(secEl,type,dayNum){
 //  BUILD HTML HELPERS
 // ═══════════════════════════════════════
 // ── Pronunciation: Web Speech API — works offline, handles full phrases ──
-// Pre-warm voices (async in some browsers)
-if(window.speechSynthesis){
-  window.speechSynthesis.getVoices();
-  window.speechSynthesis.addEventListener('voiceschanged',()=>{});
+// Cache voices once loaded (async in Chrome/Firefox)
+let _cachedVoices=[];
+function _getVoices(){
+  if(_cachedVoices.length) return Promise.resolve(_cachedVoices);
+  return new Promise(resolve=>{
+    const v=window.speechSynthesis.getVoices();
+    if(v.length){ _cachedVoices=v; resolve(v); return; }
+    window.speechSynthesis.addEventListener('voiceschanged',function onVC(){
+      _cachedVoices=window.speechSynthesis.getVoices();
+      resolve(_cachedVoices);
+    },{once:true});
+    setTimeout(()=>resolve(window.speechSynthesis.getVoices()),2000);
+  });
 }
-window.fetchAndPlay=function(btn, phrase){
+if(window.speechSynthesis) _getVoices();
+
+window.fetchAndPlay=async function(btn, phrase){
   if(!phrase) return;
   const clean=phrase.replace(/^["']|["']$/g,'').trim();
   if(!clean) return;
-  if(!window.speechSynthesis){ btn.textContent='🔇'; return; }
-  // Stop any ongoing speech first
+  if(!window.speechSynthesis){ btn.innerHTML='🔇 N/A'; return; }
   window.speechSynthesis.cancel();
   const utter=new SpeechSynthesisUtterance(clean);
   utter.lang='en-US';
   utter.rate=0.88;
   utter.pitch=1;
-  // Pick best US English voice available
-  const voices=window.speechSynthesis.getVoices();
+  const voices=await _getVoices();
   const usVoice=voices.find(v=>v.lang==='en-US'&&v.localService)
     ||voices.find(v=>v.lang==='en-US')
-    ||voices.find(v=>v.lang.startsWith('en'));
+    ||voices.find(v=>v.lang.startsWith('en-'))
+    ||voices.find(v=>v.lang.startsWith('en'))
+    ||voices[0];
   if(usVoice) utter.voice=usVoice;
-  const orig=btn.textContent||'🔊';
-  utter.onstart=()=>{ btn.textContent='🔉'; };
-  utter.onend=()=>{ btn.textContent=orig; };
-  utter.onerror=()=>{ btn.textContent='🔇'; };
+  const orig=btn.innerHTML;
+  utter.onstart=()=>{ btn.innerHTML='🔉'; };
+  utter.onend=()=>{ btn.innerHTML=orig; };
+  utter.onerror=(e)=>{ btn.innerHTML=orig; };
   window.speechSynthesis.speak(utter);
 };
 function pronounceBtn(phrase){
@@ -1550,16 +1629,50 @@ function renderMyWords(){
 }
 
 window.exportMyWords=function(){
-  const pending=getMy().filter(c=>c.status==='pending');
-  if(!pending.length){ alert('No pending words to export!'); return; }
-  const blob=new Blob([JSON.stringify(pending,null,2)],{type:'application/json'});
+  const all=getMy();
+  if(!all.length){ alert('No words to export!'); return; }
+  const blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download='my-words.json';
   a.click();
   URL.revokeObjectURL(a.href);
-  // Show instruction
-  setTimeout(()=>alert('📥 my-words.json downloaded!\n\nSave it to your English folder:\n/Documents/Claude/English/my-words.json\n\nThen type to Claude: "process my pending words now"\nto get them processed immediately — no need to wait until 9am.'),300);
+};
+
+// Import words from JSON file (for cross-device / cross-browser sync)
+window.importMyWords=function(){
+  document.getElementById('mineImportFile').click();
+};
+window.handleImportFile=function(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const imported=JSON.parse(ev.target.result);
+      if(!Array.isArray(imported)) throw new Error('invalid');
+      const existing=getMy();
+      const existingIds=new Set(existing.map(c=>c.id));
+      const existingPhrases=new Set(existing.map(c=>(c.phrase||'').toLowerCase().trim()));
+      let added=0;
+      imported.forEach(card=>{
+        if(!card.phrase) return;
+        const key=(card.phrase||'').toLowerCase().trim();
+        if(!existingIds.has(card.id)&&!existingPhrases.has(key)){
+          existing.push(card);
+          added++;
+        }
+      });
+      setMy(existing);
+      renderMyWords();
+      document.getElementById('mineExportBtn').style.display='block';
+      alert(`✅ Imported ${added} new word${added!==1?'s':''}! (${imported.length-added} already existed)`);
+    }catch(err){
+      alert('❌ Invalid file. Please export from another device first and import that file.');
+    }
+    e.target.value='';
+  };
+  reader.readAsText(file);
 };
 
 syncProcessedWords();
