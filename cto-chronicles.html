@@ -591,9 +591,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
         </div>
       </div>
       <button class="mine-add-btn" onclick="addMyWord()">➕ Add to My Words</button>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="mine-export-btn" onclick="exportMyWords()" id="mineExportBtn" style="display:none;flex:1;margin-top:0">📥 Export Words</button>
-        <button class="mine-export-btn" onclick="importMyWords()" style="flex:1;margin-top:0;border-color:rgba(0,210,160,.3);color:var(--biz)" id="mineImportBtn">📤 Import Words</button>
+      <button id="mineSyncBtn" onclick="syncToGitHub()" style="display:none;width:100%;margin-top:8px;background:linear-gradient(90deg,#6c63ff,#00d2a0);border:none;border-radius:12px;padding:10px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">☁️ Save to GitHub (sync across all devices)</button>
+      <div id="mineSyncStatus" style="font-size:12px;margin-top:6px;text-align:center;min-height:16px;color:var(--muted)"></div>
+      <div id="mineGhSetup" style="display:none;margin-top:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">🔑 One-time GitHub setup</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Create a token at <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--accent)">github.com/settings/tokens</a> with <strong>repo</strong> scope, paste it here. Saved only on this device.</div>
+        <input id="mineGhToken" type="password" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:12px;font-family:monospace"/>
+        <button onclick="saveGhToken()" style="width:100%;margin-top:8px;background:var(--accent);border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:700;color:#fff;cursor:pointer">Save Token & Sync</button>
       </div>
       <input type="file" id="mineImportFile" accept=".json" style="display:none" onchange="handleImportFile(event)"/>
       <div class="mine-hint">
@@ -1624,7 +1628,7 @@ function renderMyWords(){
   pendingEl.style.display=pending.length?'block':'none';
   processedEl.style.display=processed.length?'block':'none';
   emptyEl.style.display=all.length===0?'block':'none';
-  if(all.length>0) document.getElementById('mineExportBtn').style.display='block';
+  updateSyncBtn();
 }
 
 window.exportMyWords=function(){
@@ -1676,6 +1680,63 @@ window.handleImportFile=function(e){
 
 syncProcessedWords();
 renderMyWords();
+
+// ── GitHub Sync — push my-words.json to repo so scheduled task can process ──
+const GH_OWNER='hrkh1990', GH_REPO='English', GH_FILE='my-words.json';
+
+function getGhToken(){ return localStorage.getItem('cto_gh_token')||''; }
+
+window.saveGhToken=function(){
+  const t=document.getElementById('mineGhToken').value.trim();
+  if(!t){ alert('Paste your token first'); return; }
+  localStorage.setItem('cto_gh_token',t);
+  document.getElementById('mineGhSetup').style.display='none';
+  syncToGitHub();
+};
+
+window.syncToGitHub=async function(){
+  const token=getGhToken();
+  if(!token){
+    document.getElementById('mineGhSetup').style.display='block';
+    document.getElementById('mineGhToken').focus();
+    return;
+  }
+  const words=getMy();
+  if(!words.length){ setStatus('No words to sync yet.','var(--muted)'); return; }
+  const btn=document.getElementById('mineSyncBtn');
+  const origTxt=btn.textContent;
+  btn.textContent='⏳ Syncing…'; btn.disabled=true;
+  setStatus('Connecting to GitHub…','var(--muted)');
+  try{
+    const headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'};
+    // Get current SHA (needed to update existing file)
+    let sha='';
+    const check=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`,{headers});
+    if(check.ok){ const d=await check.json(); sha=d.sha||''; }
+    // Push file
+    const body={message:`Sync ${words.length} words from browser`,content:btoa(unescape(encodeURIComponent(JSON.stringify(words,null,2))))};
+    if(sha) body.sha=sha;
+    const res=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers,body:JSON.stringify(body)});
+    if(!res.ok){
+      if(res.status===401){ localStorage.removeItem('cto_gh_token'); throw new Error('Token invalid — re-enter it'); }
+      throw new Error('GitHub error '+res.status);
+    }
+    setStatus('✅ Synced to GitHub! Scheduled task will process tonight at 9am.','var(--biz)');
+    btn.textContent='✅ Synced!';
+    setTimeout(()=>{ btn.textContent=origTxt; btn.disabled=false; },3000);
+  }catch(e){
+    setStatus('❌ '+e.message,'var(--accent3)');
+    btn.textContent=origTxt; btn.disabled=false;
+    if(e.message.includes('re-enter')){ document.getElementById('mineGhSetup').style.display='block'; }
+  }
+  function setStatus(msg,color){ const el=document.getElementById('mineSyncStatus'); if(el){ el.textContent=msg; el.style.color=color; } }
+};
+
+// Show sync button whenever there are words
+function updateSyncBtn(){
+  const btn=document.getElementById('mineSyncBtn');
+  if(btn) btn.style.display=getMy().length?'block':'none';
+}
 
 // Flashcard filter buttons
 document.getElementById('page-flashcards').addEventListener('click',e=>{
