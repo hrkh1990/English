@@ -922,10 +922,19 @@ if(window.speechSynthesis){
   window.speechSynthesis.addEventListener('voiceschanged', _loadVoices);
 }
 
+// Detect if running on file:// (speech blocked by browser security)
+const _isFileProtocol=location.protocol==='file:';
+
 window.fetchAndPlay=function(btn, phrase){
   if(!phrase) return;
   const clean=phrase.replace(/^["']|["']$/g,'').trim();
   if(!clean) return;
+  if(_isFileProtocol){
+    btn.title='Speech blocked on local files — open english-eta-ten.vercel.app instead';
+    btn.innerHTML='🔇';
+    setTimeout(()=>{ btn.innerHTML='🔊'; btn.title='Listen (American English)'; },2000);
+    return;
+  }
   if(!window.speechSynthesis){ btn.innerHTML='🔇'; return; }
   window.speechSynthesis.cancel();
   const utter=new SpeechSynthesisUtterance(clean);
