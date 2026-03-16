@@ -901,7 +901,8 @@ function parseSection(secEl,type,dayNum){
   out.items=[];
   secEl.querySelectorAll('[data-type]').forEach(item=>{
     const card={type:item.dataset.type,section:type,day:dayNum,level:item.dataset.level,
-      phrase:item.dataset.phrase,meaning:item.dataset.meaning,example:item.dataset.example};
+      phrase:item.dataset.phrase,meaning:item.dataset.meaning,example:item.dataset.example,
+      phonetic:item.dataset.phonetic||'',audioUrl:item.dataset.audio||''};
     out.items.push(card);
     allFlashcards.push(card);
   });
@@ -913,16 +914,8 @@ function parseSection(secEl,type,dayNum){
 // ═══════════════════════════════════════
 //  BUILD HTML HELPERS
 // ═══════════════════════════════════════
-// ── Pronunciation: Web Speech API — works offline, handles full phrases ──
+// ── Pronunciation: MP3 audio URL first, Web Speech API fallback (offline) ──
 // MUST be synchronous — async/await breaks Chrome's user-gesture context for speak()
-let _cachedVoices=[];
-function _loadVoices(){ const v=window.speechSynthesis.getVoices(); if(v.length) _cachedVoices=v; }
-if(window.speechSynthesis){
-  _loadVoices();
-  window.speechSynthesis.addEventListener('voiceschanged', _loadVoices);
-}
-
-// ── Pronunciation: MP3 audio URL first, Web Speech API fallback ──
 let _cachedVoices=[];
 function _loadVoices(){ const v=window.speechSynthesis&&window.speechSynthesis.getVoices(); if(v&&v.length) _cachedVoices=v; }
 if(window.speechSynthesis){ _loadVoices(); window.speechSynthesis.addEventListener('voiceschanged',_loadVoices); }
