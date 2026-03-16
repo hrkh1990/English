@@ -463,7 +463,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
         <div class="fc-face fc-front">
           <div class="fc-type-badge idiom" id="fcTypeBadge">Idiom</div>
           <div class="fc-front-phrase" id="fcPhrase">Loading…</div>
-          <button class="pronounce-btn" id="fcPronounceBtn" onclick="fetchAndPlay(this, document.getElementById('fcPhrase').textContent)" style="margin-top:8px">🔊 Pronounce</button>
+          <button class="pronounce-btn" id="fcPronounceBtn" onclick="fetchAndPlay(this, document.getElementById('fcPhrase').textContent, document.getElementById('fcPronounceBtn').dataset.audio||'')" style="margin-top:8px">🔊 Pronounce</button>
           <div class="fc-tap-hint" style="margin-top:10px">Tap card to reveal →</div>
         </div>
         <div class="fc-face fc-back">
@@ -922,42 +922,55 @@ if(window.speechSynthesis){
   window.speechSynthesis.addEventListener('voiceschanged', _loadVoices);
 }
 
-// Detect if running on file:// (speech blocked by browser security)
-const _isFileProtocol=location.protocol==='file:';
+// ── Pronunciation: MP3 audio URL first, Web Speech API fallback ──
+let _cachedVoices=[];
+function _loadVoices(){ const v=window.speechSynthesis&&window.speechSynthesis.getVoices(); if(v&&v.length) _cachedVoices=v; }
+if(window.speechSynthesis){ _loadVoices(); window.speechSynthesis.addEventListener('voiceschanged',_loadVoices); }
 
-window.fetchAndPlay=function(btn, phrase){
-  if(!phrase) return;
-  const clean=phrase.replace(/^["']|["']$/g,'').trim();
-  if(!clean) return;
-  if(_isFileProtocol){
-    btn.title='Speech blocked on local files — open english-eta-ten.vercel.app instead';
-    btn.innerHTML='🔇';
-    setTimeout(()=>{ btn.innerHTML='🔊'; btn.title='Listen (American English)'; },2000);
+window.fetchAndPlay=function(btn, phrase, audioUrl){
+  if(!phrase&&!audioUrl) return;
+  const orig=btn.innerHTML;
+  const showErr=()=>{ btn.innerHTML='🔇'; setTimeout(()=>btn.innerHTML=orig,2000); };
+
+  // ── Method 1: Play real MP3 from dictionary CDN (works on all browsers) ──
+  if(audioUrl){
+    btn.innerHTML='🔉';
+    const audio=new Audio(audioUrl);
+    audio.onended=()=>btn.innerHTML=orig;
+    audio.onerror=()=>{ tryWebSpeech(); }; // fallback if CDN fails
+    audio.play().catch(()=>tryWebSpeech());
     return;
   }
-  if(!window.speechSynthesis){ btn.innerHTML='🔇'; return; }
-  window.speechSynthesis.cancel();
-  const utter=new SpeechSynthesisUtterance(clean);
-  utter.lang='en-US';
-  utter.rate=0.88;
-  utter.pitch=1;
-  // Use pre-cached voices — loaded at page start via voiceschanged event
-  const voices=_cachedVoices.length ? _cachedVoices : window.speechSynthesis.getVoices();
-  const usVoice=voices.find(v=>v.lang==='en-US'&&v.localService)
-    ||voices.find(v=>v.lang==='en-US')
-    ||voices.find(v=>v.lang.startsWith('en-'))
-    ||voices.find(v=>v.lang.startsWith('en'))
-    ||voices[0];
-  if(usVoice) utter.voice=usVoice;
-  const orig=btn.innerHTML;
-  utter.onstart=()=>{ btn.innerHTML='🔉'; };
-  utter.onend=()=>{ btn.innerHTML=orig; };
-  utter.onerror=()=>{ btn.innerHTML=orig; };
-  window.speechSynthesis.speak(utter);
+
+  // ── Method 2: Web Speech API (offline capable) ──
+  tryWebSpeech();
+
+  function tryWebSpeech(){
+    const clean=(phrase||'').replace(/^["']|["']$/g,'').trim();
+    if(!clean){ showErr(); return; }
+    if(!window.speechSynthesis){ showErr(); return; }
+    // Chrome bug fix: resume() must be called before speak()
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.resume();
+    const utter=new SpeechSynthesisUtterance(clean);
+    utter.lang='en-US'; utter.rate=0.88; utter.pitch=1;
+    const voices=_cachedVoices.length?_cachedVoices:window.speechSynthesis.getVoices();
+    const usVoice=voices.find(v=>v.lang==='en-US'&&v.localService)
+      ||voices.find(v=>v.lang==='en-US')
+      ||voices.find(v=>v.lang.startsWith('en'));
+    if(usVoice) utter.voice=usVoice;
+    utter.onstart=()=>btn.innerHTML='🔉';
+    utter.onend=()=>btn.innerHTML=orig;
+    utter.onerror=(e)=>{ console.warn('TTS error:',e.error); showErr(); };
+    btn.innerHTML='🔉';
+    window.speechSynthesis.speak(utter);
+  }
 };
-function pronounceBtn(phrase){
-  const safe=(phrase||'').replace(/'/g,"&apos;").replace(/"/g,"&quot;");
-  return `<button class="pronounce-btn" title="Listen (American English)" onclick="fetchAndPlay(this,&quot;${safe}&quot;)">🔊</button>`;
+
+function pronounceBtn(phrase, audioUrl){
+  const safe=(phrase||'').replace(/'/g,'&apos;').replace(/"/g,'&quot;');
+  const safeAudio=(audioUrl||'').replace(/"/g,'&quot;');
+  return `<button class="pronounce-btn" title="Listen" onclick="fetchAndPlay(this,&quot;${safe}&quot;,&quot;${safeAudio}&quot;)">🔊</button>`;
 }
 
 function starBtn(card){
@@ -977,7 +990,7 @@ function buildItemHTML(item,colorClass){
   const lv=item.level||'b1';
   return `<div class="item-card ${colorClass}">
     ${starBtn(item)}
-    <div class="item-phrase ${colorClass}">${item.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(item.phrase)}</div>
+    <div class="item-phrase ${colorClass}">${item.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(item.phrase,item.audioUrl)}</div>
     <div class="item-meaning">${item.meaning}</div>
     <div class="item-example">${item.example}</div>
   </div>`;
@@ -1000,7 +1013,7 @@ function buildSectionHTML(sec){
   const vocab=sec.items.filter(i=>i.type==='vocab');
   if(vocab.length){ h+=`<div class="block-title" style="color:var(--${c})">📚 Vocabulary</div><div class="vocab-grid">`; vocab.forEach(i=>h+=buildItemHTML(i,c)); h+=`</div>`; }
   const gram=sec.items.filter(i=>i.type==='grammar');
-  if(gram.length){ h+=`<div class="block-title" style="color:var(--${c})">📐 Grammar Point</div>`; gram.forEach(g=>{const lv=g.level||'b1'; h+=`<div class="grammar-box ${c}">${starBtn(g)}<div class="grammar-rule ${c}">${g.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(g.phrase)}</div><div class="grammar-body">${g.meaning}</div><div class="grammar-ex"><div class="right">✅ ${g.example}</div></div></div>`;});}
+  if(gram.length){ h+=`<div class="block-title" style="color:var(--${c})">📐 Grammar Point</div>`; gram.forEach(g=>{const lv=g.level||'b1'; h+=`<div class="grammar-box ${c}">${starBtn(g)}<div class="grammar-rule ${c}">${g.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(g.phrase,g.audioUrl)}</div><div class="grammar-body">${g.meaning}</div><div class="grammar-ex"><div class="right">✅ ${g.example}</div></div></div>`;});}
   const collocs=sec.items.filter(i=>i.type==='colloc');
   if(collocs.length){ h+=`<div class="block-title" style="color:var(--${c})">💎 Collocations</div><div class="colloc-grid">`; collocs.forEach(i=>h+=buildItemHTML(i,c)); h+=`</div>`; }
   if(sec.nice){ h+=`<div class="block-title" style="color:var(--${c})">✨ Nice Points</div><div class="nice-box">`; sec.nice.forEach(n=>{ h+=`<div class="nice-item">${n}</div>`; }); h+=`</div>`; }
@@ -1242,6 +1255,7 @@ function showCard(idx){
   const tc=currentCard.type;
   ['fcTypeBadge','fcTypeBadge2'].forEach(id=>{ const el=document.getElementById(id); el.className=`fc-type-badge ${tc}`; el.textContent=typeLbl[tc]||tc; });
   document.getElementById('fcPhrase').textContent=currentCard.phrase;
+  document.getElementById('fcPronounceBtn').dataset.audio=currentCard.audioUrl||'';
   document.getElementById('fcMeaning').textContent=currentCard.meaning;
   document.getElementById('fcExample').textContent=currentCard.example;
   const lv=currentCard.level||'b1';
@@ -1310,7 +1324,7 @@ function buildGrammarPage(){
     div.dataset.level=lv;
     div.innerHTML=`
       ${starBtn(g)}
-      <div class="gram-card-rule ${c}">${g.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(g.phrase)}</div>
+      <div class="gram-card-rule ${c}">${g.phrase} <span class="level-badge ${lv}">${lv.toUpperCase()}</span>${pronounceBtn(g.phrase,g.audioUrl)}</div>
       <div class="gram-card-body">${g.meaning}</div>
       <div class="gram-card-ex">✅ ${g.example}</div>
       <div class="gram-card-meta">
@@ -1612,7 +1626,8 @@ function renderMyWords(){
     const lv=c.level!=='auto'?`<span class="level-badge ${c.level}">${c.level.toUpperCase()}</span>`:'';
     const phoneticHtml=c.phonetic?`<span class="mine-phonetic">${c.phonetic}</span>`:'';
     const safePhrase=(c.phrase||'').replace(/&/g,'&amp;').replace(/'/g,'&apos;').replace(/"/g,'&quot;');
-    const speakBtn=`<button class="pronounce-btn" title="Listen" onclick="fetchAndPlay(this,&quot;${safePhrase}&quot;)">🔊</button>`;
+    const safeAudio=(c.audioUrl||'').replace(/"/g,'&quot;');
+    const speakBtn=`<button class="pronounce-btn" title="Listen" onclick="fetchAndPlay(this,&quot;${safePhrase}&quot;,&quot;${safeAudio}&quot;)">🔊</button>`;
     const retryBtn=c.status==='pending'?`<button onclick="retryLookup('${c.id}')" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(108,99,255,.12);color:var(--accent);border:1px solid rgba(108,99,255,.3);cursor:pointer;margin-left:4px">🔍 Try lookup</button>`:'';
     return `<div class="mine-card ${c.status}" id="mc_${c.id}">
       <button class="mine-delete" onclick="deleteMyWord('${c.id}')" title="Remove">✕</button>
