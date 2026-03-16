@@ -1349,6 +1349,12 @@ async function lookupWord(raw){
     statusEl.innerHTML=`✓ Found${partLabel} ${phoneticHtml} ${audioBtn} <span class="auto-badge">auto-filled</span>`;
 
   } catch(e){
+    // Network / offline error
+    if(e instanceof TypeError && e.message.toLowerCase().includes('fetch')){
+      statusEl.className='lookup-status error';
+      statusEl.innerHTML='📶 Offline — fill meaning yourself. The 🔊 button still works without internet.';
+      return;
+    }
     // Multi-word = likely idiom or phrase
     const wordCount=word.trim().split(/\s+/).length;
     if(wordCount>1){
@@ -1385,7 +1391,7 @@ async function lookupWord(raw){
 function getMy(){ try{ return JSON.parse(localStorage.getItem('cto_mywords')||'[]'); }catch(e){ return []; } }
 function setMy(arr){ try{ localStorage.setItem('cto_mywords',JSON.stringify(arr)); }catch(e){} }
 
-// Auto-sync: compare localStorage pending words against processed words already in #userWords
+/// Auto-sync: compare localStorage pending words against processed words already in #userWords
 function syncProcessedWords(){
   const userWordEls=document.querySelectorAll('#userWords [data-user="true"]');
   if(!userWordEls.length) return;
@@ -1514,8 +1520,8 @@ function renderMyWords(){
   function buildCard(c){
     const lv=c.level!=='auto'?`<span class="level-badge ${c.level}">${c.level.toUpperCase()}</span>`:'';
     const phoneticHtml=c.phonetic?`<span class="mine-phonetic">${c.phonetic}</span>`:'';
-    const safePhrase=(c.phrase||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
-    const speakBtn=`<button class="pronounce-btn" title="Listen" onclick="fetchAndPlay(this,'${safePhrase}')">🔊</button>`;
+    const safePhrase=(c.phrase||'').replace(/&/g,'&amp;').replace(/'/g,'&apos;').replace(/"/g,'&quot;');
+    const speakBtn=`<button class="pronounce-btn" title="Listen" onclick="fetchAndPlay(this,&quot;${safePhrase}&quot;)">🔊</button>`;
     const retryBtn=c.status==='pending'?`<button onclick="retryLookup('${c.id}')" style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(108,99,255,.12);color:var(--accent);border:1px solid rgba(108,99,255,.3);cursor:pointer;margin-left:4px">🔍 Try lookup</button>`:'';
     return `<div class="mine-card ${c.status}" id="mc_${c.id}">
       <button class="mine-delete" onclick="deleteMyWord('${c.id}')" title="Remove">✕</button>
