@@ -1722,6 +1722,52 @@ window.handleImportFile=function(e){
 syncProcessedWords();
 renderMyWords();
 
+// ── Auto-retry pending words: look them up from dictionary API on page load ──
+(async function retryPendingWords(){
+  const pending=getMy().filter(w=>w.status==='pending'&&w.phrase);
+  if(!pending.length) return;
+  let updated=false;
+  for(const card of pending){
+    const word=(card.phrase||'').replace(/^["']|["']$/g,'').trim();
+    if(!word) continue;
+    try{
+      const res=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.toLowerCase())}`);
+      if(!res.ok) continue;
+      const data=await res.json();
+      if(!Array.isArray(data)||!data.length) continue;
+      const entry=data[0];
+      const phonetics=entry.phonetics||[];
+      const usP=phonetics.find(p=>p.audio&&p.audio.includes('-us'));
+      const anyP=phonetics.find(p=>p.audio);
+      const chosen=usP||anyP||phonetics.find(p=>p.text)||phonetics[0]||{};
+      let bestDef='', bestEx='';
+      for(const m of (entry.meanings||[])){
+        for(const d of (m.definitions||[])){
+          if(!bestDef&&d.definition) bestDef=d.definition;
+          if(!bestEx&&d.example) bestEx=d.example;
+          if(bestDef&&bestEx) break;
+        }
+        if(bestDef&&bestEx) break;
+      }
+      if(bestDef){
+        const all=getMy();
+        const idx=all.findIndex(w=>w.id===card.id||(w.phrase===card.phrase&&w.status==='pending'));
+        if(idx>=0){
+          all[idx]={...all[idx],
+            status:'processed',
+            meaning:all[idx].meaning||bestDef,
+            example:all[idx].example||bestEx||'',
+            phonetic:all[idx].phonetic||chosen.text||entry.phonetic||'',
+            audioUrl:all[idx].audioUrl||chosen.audio||''};
+          setMy(all);
+          updated=true;
+        }
+      }
+    }catch(e){ /* offline or not found — skip */ }
+  }
+  if(updated){ syncProcessedWords(); renderMyWords(); }
+})();
+
 // ── Auto-pull words from GitHub on every page load (public repo, no token needed) ──
 (async function autoLoadFromGitHub(){
   try{
