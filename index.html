@@ -1272,7 +1272,6 @@ function navigate(hash){
   window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',()=>navigate(location.hash));
-navigate(location.hash);
 document.querySelectorAll('.home-card,.nav-tab').forEach(el=>{
   el.addEventListener('click',e=>{e.preventDefault();const h=el.getAttribute('href');history.pushState(null,'',h);navigate(h);});
 });
@@ -2219,6 +2218,9 @@ document.getElementById('page-flashcards').addEventListener('click',e=>{
   if(btn.dataset.section!==undefined){ fcState.section=btn.dataset.section; document.querySelectorAll('.fc-ctrl-btn[data-section]').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); if(btn.dataset.section==='gen') btn.classList.add('gen-fc'); if(btn.dataset.section==='biz') btn.classList.add('biz-fc'); }
   initDeck();
 });
+
+// Initial navigation — must run LAST so IV_QUESTIONS, ivState, and all listeners are ready
+navigate(location.hash);
 </script>
 </body>
 </html>
