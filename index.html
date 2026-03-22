@@ -331,6 +331,48 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .gram-card-ex{font-size:13px;color:var(--text);font-style:italic;}
 .gram-card-meta{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center;}
 .gram-no-results{text-align:center;padding:50px 20px;color:var(--muted);font-size:15px;display:none;}
+/* ── INTERVIEW PAGE ── */
+.nav-tab.active.iv-tab{background:linear-gradient(90deg,#e040fb,#7c4dff);color:#fff;}
+.iv-hero{background:linear-gradient(135deg,#1a1027 0%,#0d1117 60%,#1a0d2e 100%);border-bottom:1px solid var(--border);padding:36px 24px 28px;text-align:center;}
+.iv-hero h2{font-size:26px;font-weight:800;background:linear-gradient(90deg,#e040fb,#7c4dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.iv-hero p{color:var(--muted);margin-top:6px;font-size:14px;}
+.iv-mode-bar{display:flex;gap:10px;padding:20px 20px 0;justify-content:center;flex-wrap:wrap;}
+.iv-mode-btn{padding:9px 22px;border-radius:20px;border:2px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.iv-mode-btn.active[data-mode="hr"]{background:linear-gradient(90deg,#00b4d8,#0077b6);border-color:transparent;color:#fff;}
+.iv-mode-btn.active[data-mode="tech"]{background:linear-gradient(90deg,#e040fb,#7c4dff);border-color:transparent;color:#fff;}
+.iv-mode-btn.active[data-mode="manager"]{background:linear-gradient(90deg,#00d2a0,#00897b);border-color:transparent;color:#fff;}
+.iv-meta-bar{display:flex;gap:10px;padding:14px 20px 0;align-items:center;flex-wrap:wrap;}
+.iv-counter{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.5px;}
+.iv-difficulty{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;}
+.iv-difficulty.easy{background:rgba(0,210,160,.15);color:#00d2a0;}
+.iv-difficulty.medium{background:rgba(255,183,71,.15);color:#ffb347;}
+.iv-difficulty.hard{background:rgba(255,101,132,.15);color:#ff6584;}
+.iv-topic{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.06);color:var(--muted);font-weight:600;}
+.iv-card{background:var(--card);border:1px solid var(--border);border-radius:20px;margin:16px 16px 24px;padding:26px 22px;max-width:720px;margin-left:auto;margin-right:auto;}
+.iv-q-label{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;text-transform:uppercase;}
+.iv-question{font-size:20px;font-weight:800;color:var(--text);line-height:1.45;margin-bottom:20px;}
+.iv-think-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px;}
+.iv-think-label{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:10px;}
+.iv-textarea{width:100%;background:transparent;border:none;color:var(--text);font-size:14px;line-height:1.6;resize:vertical;outline:none;font-family:inherit;min-height:80px;}
+.iv-reveal-btn{width:100%;padding:13px;border-radius:12px;border:none;background:linear-gradient(90deg,#e040fb,#7c4dff);color:#fff;font-size:14px;font-weight:800;cursor:pointer;margin-bottom:0;transition:opacity .2s;}
+.iv-reveal-btn:hover{opacity:.88;}
+.iv-answer-box{margin-top:22px;display:flex;flex-direction:column;gap:0;}
+.iv-section-label{font-size:10px;font-weight:800;letter-spacing:1.5px;margin-bottom:8px;text-transform:uppercase;}
+.iv-looking-for{font-size:14px;color:var(--text);line-height:1.7;background:rgba(0,210,160,.06);border-left:3px solid var(--gen);border-radius:0 8px 8px 0;padding:12px 14px;}
+.iv-model-answer{font-size:14px;color:var(--text);line-height:1.8;white-space:pre-line;}
+.iv-phrases{display:flex;flex-wrap:wrap;gap:8px;}
+.iv-phrase-chip{padding:6px 14px;border-radius:20px;background:rgba(124,77,255,.15);color:#c197ff;font-size:13px;font-weight:600;border:1px solid rgba(124,77,255,.25);}
+.iv-mistakes{font-size:13px;color:var(--muted);line-height:1.7;}
+.iv-mistakes li{margin-bottom:4px;}
+.iv-nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:24px;padding-top:18px;border-top:1px solid var(--border);}
+.iv-nav-btn{padding:9px 20px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;}
+.iv-nav-btn:hover{border-color:rgba(224,64,251,.5);color:#e040fb;}
+.iv-nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+.iv-nav-next{background:rgba(124,77,255,.15);border-color:rgba(124,77,255,.3);color:#c197ff;}
+.iv-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:60%;}
+.iv-dot{width:8px;height:8px;border-radius:50%;background:var(--border);cursor:pointer;transition:all .2s;}
+.iv-dot.active{background:#e040fb;transform:scale(1.3);}
+.iv-dot.seen{background:rgba(124,77,255,.4);}
 </style>
 </head>
 <body>
@@ -345,6 +387,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   <a class="nav-tab saved-tab" data-page="saved" href="#saved">⭐ Saved</a>
   <a class="nav-tab gram-tab" data-page="grammar" href="#grammar">📐 Grammar</a>
   <a class="nav-tab mine-tab" data-page="mine" href="#mine">✍️ Mine</a>
+  <a class="nav-tab iv-tab" data-page="interview" href="#interview">🎙️ Interview</a>
   <div class="nav-spacer"></div>
   <span class="nav-day-badge" id="navDayBadge">Day 2</span>
 </nav>
@@ -621,6 +664,48 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <div style="font-size:13px;line-height:1.7">Add a new word above, or<br/>
       if you added words on another device or browser,<br/>
       use the <strong style="color:var(--biz)">📤 Import Words</strong> button to bring them here.</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERVIEW PAGE -->
+<div class="page" id="page-interview">
+  <div class="iv-hero">
+    <h2>🎙️ Interview Simulator</h2>
+    <p>Realistic CTO-level interview practice. Three modes — HR, Technical, and Leadership.</p>
+  </div>
+  <div class="iv-mode-bar">
+    <button class="iv-mode-btn active" data-mode="hr">👤 HR</button>
+    <button class="iv-mode-btn" data-mode="tech">⚙️ Technical</button>
+    <button class="iv-mode-btn" data-mode="manager">🧑‍💼 Leadership</button>
+  </div>
+  <div class="iv-meta-bar">
+    <span class="iv-counter" id="ivCounter">Question 1 of 12</span>
+    <span class="iv-difficulty" id="ivDifficulty"></span>
+    <span class="iv-topic" id="ivTopic"></span>
+  </div>
+  <div class="iv-card" id="ivCard">
+    <div class="iv-q-label">INTERVIEW QUESTION</div>
+    <div class="iv-question" id="ivQuestion"></div>
+    <div class="iv-think-box">
+      <div class="iv-think-label">💭 What's your answer? Think first, then write it down.</div>
+      <textarea class="iv-textarea" id="ivUserAnswer" placeholder="Type your answer here — then compare it with the model answer below…" rows="4"></textarea>
+    </div>
+    <button class="iv-reveal-btn" id="ivRevealBtn" onclick="ivReveal()">💡 Show Model Answer &amp; Tips</button>
+    <div class="iv-answer-box" id="ivAnswerBox" style="display:none">
+      <div class="iv-section-label" style="color:var(--gen)">🎯 What the interviewer is looking for</div>
+      <div class="iv-looking-for" id="ivLookingFor"></div>
+      <div class="iv-section-label" style="color:var(--biz);margin-top:16px">✅ Model Answer</div>
+      <div class="iv-model-answer" id="ivModelAnswer"></div>
+      <div class="iv-section-label" style="color:var(--accent3);margin-top:16px">🗣️ Key Phrases to Use</div>
+      <div class="iv-phrases" id="ivPhrases"></div>
+      <div class="iv-section-label" style="color:var(--muted);margin-top:16px">⚠️ Common Mistakes to Avoid</div>
+      <div class="iv-mistakes" id="ivMistakes"></div>
+    </div>
+    <div class="iv-nav-row">
+      <button class="iv-nav-btn" id="ivPrevBtn" onclick="ivNav(-1)">← Previous</button>
+      <div class="iv-dots" id="ivDots"></div>
+      <button class="iv-nav-btn iv-nav-next" id="ivNextBtn" onclick="ivNav(1)">Next →</button>
     </div>
   </div>
 </div>
@@ -925,144 +1010,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   </div>
 </div>
 
-
-<div data-day="6" data-date="March 19, 2026" data-level="B1" data-topics="incident,outage,communication,crisis,teamwork" data-title="🔥 The Production Outage">
-  <div data-section="gen">
-    <div data-iceq="Have you ever had to stay calm during a stressful situation at work? What happened?" data-icetip="Describe the situation and what helped you stay focused. Use phrases like: 'I had to keep my cool because…' or 'Things were falling apart, but we pulled through.'"></div>
-    <div data-dialogue="true" data-dlabel="Two friends catch up over coffee after a rough week at work" data-dtype="gen">
-      <div data-spk="Lena" data-spkclass="s1">You look exhausted. What happened?</div>
-      <div data-spk="Jake" data-spkclass="s2">Oh, it was a nightmare. Our main app went down on Tuesday, and I had to <span class="hl-g">keep my cool</span> while everything was <span class="hl-g">falling apart</span>.</div>
-      <div data-spk="Lena" data-spkclass="s1">That sounds rough. How long was it down?</div>
-      <div data-spk="Jake" data-spkclass="s2">About three hours. We were all <span class="hl-g">under pressure</span>, but eventually we <span class="hl-g">got to the bottom of</span> it — a bad config change.</div>
-      <div data-spk="Lena" data-spkclass="s1">At least you figured it out. Did your boss <span class="hl-g">have your back</span>?</div>
-      <div data-spk="Jake" data-spkclass="s2">Yeah, actually. She told the team, &quot;Mistakes happen — what matters is that we <span class="hl-g">pull through</span> together.&quot;</div>
-      <div data-spk="Lena" data-spkclass="s1">That&apos;s a good boss. You should <span class="hl-g">take it in stride</span> — you handled it well.</div>
-      <div data-spk="Jake" data-spkclass="s2">Thanks. I&apos;m just glad it <span class="hl-g">blew over</span>. Now I can finally breathe.</div>
-    </div>
-    <div data-type="idiom" data-section="gen" data-day="6" data-level="b1" data-phrase="keep my cool" data-meaning="Stay calm and not show anger or panic in a difficult or stressful situation" data-example="&quot;Even when the client started yelling, she managed to keep her cool and respond professionally.&quot;" data-phonetic="/kiːp maɪ kuːl/" data-audio=""></div>
-    <div data-type="idiom" data-section="gen" data-day="6" data-level="b1" data-phrase="get to the bottom of" data-meaning="Find the true cause or explanation of a problem through investigation" data-example="&quot;We need to get to the bottom of why the deployment failed before we try again.&quot;" data-phonetic="/ɡɛt tuː ðə ˈbɒtəm ʌv/" data-audio=""></div>
-    <div data-type="idiom" data-section="gen" data-day="6" data-level="b2" data-phrase="have someone's back" data-meaning="Support or protect someone, especially in a difficult situation" data-example="&quot;Don&apos;t worry about the meeting — I&apos;ve got your back if anyone pushes back on the proposal.&quot;" data-phonetic="/hæv ˈsʌmwʌnz bæk/" data-audio=""></div>
-    <div data-type="colloc" data-section="gen" data-day="6" data-level="b1" data-phrase="under pressure" data-meaning="In a state of stress because of urgent demands or expectations" data-example="&quot;People make more mistakes when they&apos;re under pressure, so let&apos;s not rush this release.&quot;" data-phonetic="/ˈʌndər ˈprɛʃər/" data-audio=""></div>
-    <div data-type="colloc" data-section="gen" data-day="6" data-level="b1" data-phrase="pull through" data-meaning="Survive or succeed in getting past a difficult period or challenge" data-example="&quot;It was a tough quarter, but the team pulled through and hit all their targets.&quot;" data-phonetic="/pʊl θruː/" data-audio=""></div>
-    <div data-type="vocab" data-section="gen" data-day="6" data-level="b2" data-phrase="take it in stride" data-meaning="Deal with something difficult calmly and without letting it upset you" data-example="&quot;He took the critical review in stride and used it to improve his next presentation.&quot;" data-phonetic="/teɪk ɪt ɪn straɪd/" data-audio=""></div>
-    <div data-type="vocab" data-section="gen" data-day="6" data-level="b1" data-phrase="blow over" data-meaning="(of a problem or crisis) to pass and be forgotten without serious consequences" data-example="&quot;The controversy around the product change blew over after a couple of weeks.&quot;" data-phonetic="/bloʊ ˈoʊvər/" data-audio=""></div>
-    <div data-type="power" data-section="gen" data-day="6" data-level="b1" data-phrase="Crisis Calm Power Phrase" data-meaning="Sound composed and reassuring when describing how you handled a stressful event" data-example="&quot;Things were falling apart, but I kept my cool, and we pulled through. Once we got to the bottom of it, the whole thing blew over pretty quickly.&quot;" data-phonetic="" data-audio=""></div>
-    <div data-nice='["\"Keep my cool\" is much more natural than \"stay calm\" in casual conversation — native speakers almost always prefer it","\"Get to the bottom of\" implies detective work — use it when the cause is unknown and you need to investigate","\"Have someone&apos;s back\" is very warm and loyal — it&apos;s common between close colleagues and friends","\"Pull through\" has an emotional weight — it suggests the challenge was real, not trivial","\"Blow over\" only works for temporary problems — don&apos;t use it for serious, permanent issues"]'></div>
-  </div>
-  <div data-section="biz">
-    <div data-dialogue="true" data-dlabel="Reza (CTO) leads an incident response call with his engineering team" data-dtype="biz">
-      <div data-spk="Reza" data-spkclass="s2">Alright team, let&apos;s <span class="hl-b">get on the same page</span>. The payments service is down and customers are affected. What&apos;s the <span class="hl-b">blast radius</span>?</div>
-      <div data-spk="Nina" data-spkclass="s1">About 40% of transactions are failing. We&apos;ve already <span class="hl-b">spun up</span> a <span class="hl-b">war room</span> and the on-call team is investigating.</div>
-      <div data-spk="Reza" data-spkclass="s2">Good. Let&apos;s <span class="hl-b">triage</span> this. Nina, you own the technical fix. Kai, I need you to handle <span class="hl-b">stakeholder communication</span> — update the VP of Product every 30 minutes.</div>
-      <div data-spk="Kai" data-spkclass="s3">On it. Should I send an external <span class="hl-b">status page</span> update too?</div>
-      <div data-spk="Reza" data-spkclass="s2">Yes — keep it factual and short. &quot;We&apos;re aware of the issue and actively working on a fix.&quot; No finger-pointing, no speculation.</div>
-      <div data-spk="Nina" data-spkclass="s1">Found it — a bad database migration <span class="hl-b">rolled out</span> without the feature flag. I&apos;m <span class="hl-b">rolling back</span> now.</div>
-      <div data-spk="Reza" data-spkclass="s2">Perfect. Once we&apos;re stable, we&apos;ll do a full <span class="hl-b">postmortem</span> — blameless, as always. I want <span class="hl-b">root cause</span> and <span class="hl-b">action items</span> documented by end of day.</div>
-      <div data-spk="Nina" data-spkclass="s1">Service is back. Transactions are recovering.</div>
-    </div>
-    <div data-type="vocab" data-section="biz" data-day="6" data-level="b2" data-phrase="blast radius" data-meaning="The scope or extent of impact when something goes wrong — how many users, systems, or processes are affected" data-example="&quot;Before we deploy, let&apos;s understand the blast radius if something breaks — is it one team or the whole company?&quot;" data-phonetic="/blæst ˈreɪdiəs/" data-audio=""></div>
-    <div data-type="vocab" data-section="biz" data-day="6" data-level="b1" data-phrase="war room" data-meaning="A dedicated space (physical or virtual) where a team gathers to focus intensely on solving a critical problem" data-example="&quot;We set up a war room on Slack and didn&apos;t leave until the service was fully restored.&quot;" data-phonetic="/wɔːr ruːm/" data-audio=""></div>
-    <div data-type="vocab" data-section="biz" data-day="6" data-level="b2" data-phrase="postmortem" data-meaning="A structured review conducted after an incident to understand what went wrong and how to prevent it in the future" data-example="&quot;Every major outage gets a blameless postmortem — we focus on systems, not people.&quot;" data-phonetic="/ˌpoʊstˈmɔːrtəm/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="6" data-level="b1" data-phrase="roll back" data-meaning="Reverse a deployment or change to return a system to its previous working state" data-example="&quot;The new release caused errors, so we rolled back to the last stable version within minutes.&quot;" data-phonetic="/roʊl bæk/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="6" data-level="b1" data-phrase="root cause" data-meaning="The fundamental, underlying reason why a problem occurred — not just the symptoms" data-example="&quot;The root cause wasn&apos;t the code itself — it was a missing validation step in our deployment pipeline.&quot;" data-phonetic="/ruːt kɔːz/" data-audio=""></div>
-    <div data-type="idiom" data-section="biz" data-day="6" data-level="b1" data-phrase="get on the same page" data-meaning="Reach a shared understanding so everyone has the same information and expectations" data-example="&quot;Before we respond to the client, let&apos;s get on the same page about what happened and what we&apos;re doing about it.&quot;" data-phonetic="/ɡɛt ɒn ðə seɪm peɪdʒ/" data-audio=""></div>
-    <div data-type="power" data-section="biz" data-day="6" data-level="b2" data-phrase="Incident Leadership Power Phrase" data-meaning="Sound decisive and organized when leading a team through a production crisis" data-example="&quot;Let&apos;s get on the same page — I need to understand the blast radius. Once we roll back and stabilize, we&apos;ll run a blameless postmortem to find the root cause.&quot;" data-phonetic="" data-audio=""></div>
-    <div data-nice='["\"Blast radius\" comes from military language but is now standard in tech — it sounds sharp and professional in incident calls","\"War room\" signals urgency — use it only for real crises, not everyday bugs","\"Postmortem\" is always paired with \"blameless\" in healthy engineering cultures — it&apos;s about systems, not blame","\"Roll back\" is one of the first things you learn in DevOps — it&apos;s your safety net when things go wrong","\"Get on the same page\" is essential for meetings — it means &apos;let&apos;s align before we act&apos;"]'></div>
-  </div>
-</div>
-<div data-day="7" data-date="March 20, 2026" data-level="B1" data-topics="negotiation,techdebt,priorities,persuasion,compromise" data-title="⚖️ The Tech Debt Negotiation">
-  <div data-section="gen">
-    <div data-iceq="Have you ever had to convince someone to change their priorities? How did you approach it?" data-icetip="Think about a time you needed to persuade a colleague or a friend. Use phrases like: 'I had to make a case for…' or 'We ended up meeting halfway.'"></div>
-    <div data-dialogue="true" data-dlabel="Two colleagues discuss how to convince a stubborn manager to change plans" data-dtype="gen">
-      <div data-spk="Sam" data-spkclass="s1">How did your meeting with the director go? Did she <span class="hl-g">come around</span> to your idea?</div>
-      <div data-spk="Priya" data-spkclass="s2">Not exactly. She wanted to <span class="hl-g">stick to</span> the original plan, but I tried to <span class="hl-g">make a case</span> for doing things differently.</div>
-      <div data-spk="Sam" data-spkclass="s1">That&apos;s tough. Did you <span class="hl-g">stand your ground</span>?</div>
-      <div data-spk="Priya" data-spkclass="s2">I did, but I also tried not to <span class="hl-g">push back</span> too hard. You know, you catch more flies with honey.</div>
-      <div data-spk="Sam" data-spkclass="s1">Smart. So what happened in the end?</div>
-      <div data-spk="Priya" data-spkclass="s2">We <span class="hl-g">met halfway</span>. She agreed to give us two weeks if I could <span class="hl-g">lay out</span> a clear plan by Friday.</div>
-      <div data-spk="Sam" data-spkclass="s1">Nice. Sounds like you really <span class="hl-g">won her over</span>.</div>
-      <div data-spk="Priya" data-spkclass="s2">I think what helped was that I <span class="hl-g">backed it up</span> with real numbers. Hard to argue with data.</div>
-    </div>
-    <div data-type="idiom" data-section="gen" data-day="7" data-level="b1" data-phrase="come around" data-meaning="Gradually change your opinion and start to agree with something you initially opposed" data-example="&quot;She was skeptical at first, but after seeing the prototype she came around to the idea.&quot;" data-phonetic="/kʌm əˈraʊnd/" data-audio=""></div>
-    <div data-type="idiom" data-section="gen" data-day="7" data-level="b1" data-phrase="stand your ground" data-meaning="Maintain your position or opinion firmly, even when others disagree or pressure you" data-example="&quot;The client wanted to cut testing time, but the QA lead stood her ground and insisted on the full cycle.&quot;" data-phonetic="/stænd jɔːr ɡraʊnd/" data-audio=""></div>
-    <div data-type="idiom" data-section="gen" data-day="7" data-level="b2" data-phrase="win someone over" data-meaning="Persuade someone to support you or agree with you, often by being charming or presenting strong arguments" data-example="&quot;He won the board over with a compelling demo that showed real user impact.&quot;" data-phonetic="/wɪn ˈsʌmwʌn ˈoʊvər/" data-audio=""></div>
-    <div data-type="colloc" data-section="gen" data-day="7" data-level="b1" data-phrase="make a case" data-meaning="Present reasons and evidence to support an argument or proposal" data-example="&quot;If you want more budget, you need to make a case that shows the return on investment.&quot;" data-phonetic="/meɪk ə keɪs/" data-audio=""></div>
-    <div data-type="colloc" data-section="gen" data-day="7" data-level="a2" data-phrase="meet halfway" data-meaning="Reach a compromise where both sides give up something to find a solution" data-example="&quot;We couldn&apos;t get everything we wanted, but we met halfway and both teams were satisfied.&quot;" data-phonetic="/miːt ˈhæfweɪ/" data-audio=""></div>
-    <div data-type="vocab" data-section="gen" data-day="7" data-level="b1" data-phrase="back it up" data-meaning="Support a claim or argument with evidence, facts, or proof" data-example="&quot;Don&apos;t just say the system is slow — back it up with performance metrics.&quot;" data-phonetic="/bæk ɪt ʌp/" data-audio=""></div>
-    <div data-type="vocab" data-section="gen" data-day="7" data-level="b1" data-phrase="lay out" data-meaning="Explain or present something clearly and in an organized way" data-example="&quot;She laid out the entire migration plan in a single document so everyone could follow it.&quot;" data-phonetic="/leɪ aʊt/" data-audio=""></div>
-    <div data-type="power" data-section="gen" data-day="7" data-level="b1" data-phrase="Persuasion Power Phrase" data-meaning="Sound confident and reasonable when describing how you convinced someone through compromise and evidence" data-example="&quot;I made a case for changing the plan and backed it up with real data. She didn&apos;t come around immediately, but we met halfway, and in the end I think I won her over.&quot;" data-phonetic="" data-audio=""></div>
-    <div data-nice='["\"Come around\" implies a slow, natural change of mind — it&apos;s gentler than \"I convinced her\" and sounds more respectful","\"Stand your ground\" is powerful but use it carefully — it can sound confrontational if the situation doesn&apos;t warrant it","\"Make a case\" is borrowed from legal English — you&apos;re essentially building an argument like a lawyer","\"Meet halfway\" is the gold standard phrase for compromise in English — native speakers use it constantly","\"Back it up\" is the secret weapon in any argument — native speakers respect people who bring evidence, not just opinions"]'></div>
-  </div>
-  <div data-section="biz">
-    <div data-dialogue="true" data-dlabel="Reza (CTO) negotiates with the Head of Product to allocate sprint capacity for technical debt" data-dtype="biz">
-      <div data-spk="Reza" data-spkclass="s2">Maya, I want to <span class="hl-b">carve out</span> about 30% of next sprint&apos;s capacity for tech debt. Our <span class="hl-b">codebase</span> is becoming a liability.</div>
-      <div data-spk="Maya" data-spkclass="s1">30%? That&apos;s a big ask. We have three features on the <span class="hl-b">roadmap</span> that are already committed to customers. Can we <span class="hl-b">scale it back</span> to 15%?</div>
-      <div data-spk="Reza" data-spkclass="s2">I hear you, but here&apos;s the <span class="hl-b">trade-off</span>: if we don&apos;t address this now, we&apos;ll keep <span class="hl-b">accumulating</span> debt and shipping will get slower every sprint.</div>
-      <div data-spk="Maya" data-spkclass="s1">Can you <span class="hl-b">quantify</span> the impact? I need something concrete to bring to the exec team.</div>
-      <div data-spk="Reza" data-spkclass="s2">Absolutely. Our <span class="hl-b">cycle time</span> has increased 40% over six months. If we invest two sprints now, I project we&apos;ll <span class="hl-b">recoup</span> that time within a quarter.</div>
-      <div data-spk="Maya" data-spkclass="s1">That&apos;s compelling. What if we <span class="hl-b">ring-fence</span> 25% for two sprints and then reassess?</div>
-      <div data-spk="Reza" data-spkclass="s2">Deal. I&apos;ll put together a <span class="hl-b">burn-down plan</span> showing exactly which items we&apos;ll tackle and the expected <span class="hl-b">velocity</span> improvement.</div>
-      <div data-spk="Maya" data-spkclass="s1">Perfect. If the numbers hold up, I&apos;ll <span class="hl-b">advocate</span> for making this a recurring allocation.</div>
-    </div>
-    <div data-type="vocab" data-section="biz" data-day="7" data-level="b2" data-phrase="carve out" data-meaning="Deliberately set aside or reserve a portion of time, budget, or resources for a specific purpose" data-example="&quot;We need to carve out dedicated time each sprint for security improvements.&quot;" data-phonetic="/kɑːrv aʊt/" data-audio=""></div>
-    <div data-type="vocab" data-section="biz" data-day="7" data-level="b2" data-phrase="trade-off" data-meaning="A situation where you accept something less desirable in exchange for something more desirable — a balance between two competing things" data-example="&quot;There&apos;s always a trade-off between speed and quality — we need to decide which matters more right now.&quot;" data-phonetic="/ˈtreɪd ɒf/" data-audio=""></div>
-    <div data-type="vocab" data-section="biz" data-day="7" data-level="b2" data-phrase="ring-fence" data-meaning="Protect a specific amount of budget, time, or resources so it cannot be used for anything else" data-example="&quot;Let&apos;s ring-fence 20% of engineering capacity so product requests don&apos;t consume everything.&quot;" data-phonetic="/ˈrɪŋ fɛns/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="7" data-level="b1" data-phrase="scale back" data-meaning="Reduce the size, scope, or amount of something" data-example="&quot;We had to scale back the launch to just two markets instead of five due to resource constraints.&quot;" data-phonetic="/skeɪl bæk/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="7" data-level="b2" data-phrase="cycle time" data-meaning="The total time it takes to complete one unit of work from start to finish — a key engineering productivity metric" data-example="&quot;Our cycle time from code commit to production deploy went from two days to five — that&apos;s a red flag.&quot;" data-phonetic="/ˈsaɪkəl taɪm/" data-audio=""></div>
-    <div data-type="idiom" data-section="biz" data-day="7" data-level="b2" data-phrase="recoup" data-meaning="Recover or get back money, time, or effort that was previously spent or lost" data-example="&quot;The refactoring took three weeks, but we recouped that investment within the first month through faster deployments.&quot;" data-phonetic="/rɪˈkuːp/" data-audio=""></div>
-    <div data-type="power" data-section="biz" data-day="7" data-level="b2" data-phrase="Tech Debt Negotiation Power Phrase" data-meaning="Sound strategic and data-driven when persuading stakeholders to invest in technical improvements" data-example="&quot;Here&apos;s the trade-off: if we carve out 25% of capacity and ring-fence it for two sprints, our cycle time drops and we recoup the investment within a quarter.&quot;" data-phonetic="" data-audio=""></div>
-    <div data-nice='["\"Carve out\" implies deliberate, intentional allocation — it sounds much more professional than just &apos;set aside&apos;","\"Trade-off\" is essential business vocabulary — executives think in trade-offs, so using this word shows strategic thinking","\"Ring-fence\" comes from British English and is common in finance and tech — it means the protected resources are untouchable","\"Scale back\" is the polite way to say &apos;do less&apos; — it&apos;s diplomatic and works well in negotiations","\"Cycle time\" is a metric every engineering leader should know — using it in conversation signals you understand engineering productivity"]'></div>
-  </div>
-</div>
-
-<div data-day="8" data-date="March 22, 2026" data-level="B1" data-topics="feedback,performance,difficult-conversations,honesty,leadership" data-title="💬 The Performance Conversation">
-  <div data-section="gen">
-    <div data-iceq="Have you ever had to tell someone something they didn't want to hear? How did you handle it?" data-icetip="Try: 'I had to…' / 'I found it helpful to…' / 'The hardest part was…'"></div>
-    <div data-dialogue="true" data-dlabel="Daniel and his friend Chris — coffee shop, Saturday afternoon" data-dtype="gen">
-      <div data-spk="Chris" data-spkclass="s3">You look like something's on your mind.</div>
-      <div data-spk="Daniel" data-spkclass="s2">Yeah, honestly. I've got a <span class="hl-g">tough conversation</span> coming up on Monday. Someone on my team has been <span class="hl-g">falling short</span> for a while, and I've been <span class="hl-g">putting it off</span>.</div>
-      <div data-spk="Chris" data-spkclass="s3">How long have you been <span class="hl-g">beating around the bush</span>?</div>
-      <div data-spk="Daniel" data-spkclass="s2">Too long. I kept finding reasons to delay it. But I know I just need to <span class="hl-g">bite the bullet</span> and be direct.</div>
-      <div data-spk="Chris" data-spkclass="s3">What's the hardest part — knowing what to say, or actually saying it?</div>
-      <div data-spk="Daniel" data-spkclass="s2">Both. I want to be <span class="hl-g">candid</span> without being harsh. I'll need to <span class="hl-g">choose my words carefully</span>.</div>
-      <div data-spk="Chris" data-spkclass="s3">Honestly, people usually respect you more when you're straight with them. Avoiding it just makes things more <span class="hl-g">awkward</span>.</div>
-      <div data-spk="Daniel" data-spkclass="s2">You're right. I think we just haven't been <span class="hl-g">on the same page</span> about what's expected — and that's partly on me.</div>
-    </div>
-    <div data-type="idiom" data-section="gen" data-day="8" data-level="b1" data-phrase="beat around the bush" data-meaning="Avoid saying what you really mean; talk around a subject instead of addressing it directly" data-example="&quot;Stop beating around the bush — just tell me what you think.&quot;" data-phonetic="/biːt əˌraʊnd ðə ˈbʊʃ/" data-audio=""></div>
-    <div data-type="idiom" data-section="gen" data-day="8" data-level="b1" data-phrase="bite the bullet" data-meaning="Force yourself to do something difficult or unpleasant that you have been avoiding" data-example="&quot;I finally bit the bullet and had the conversation I&apos;d been putting off for weeks.&quot;" data-phonetic="/baɪt ðə ˈbʊlɪt/" data-audio=""></div>
-    <div data-type="vocab" data-section="gen" data-day="8" data-level="b2" data-phrase="candid" data-meaning="Direct and honest, even when the truth is uncomfortable" data-example="&quot;I appreciate you being candid with me — it helps more than vague reassurances.&quot;" data-phonetic="/ˈkændɪd/" data-audio=""></div>
-    <div data-type="vocab" data-section="gen" data-day="8" data-level="a2" data-phrase="awkward" data-meaning="Uncomfortable, embarrassing, or socially difficult" data-example="&quot;The silence after the meeting was incredibly awkward.&quot;" data-phonetic="/ˈɔːkwəd/" data-audio=""></div>
-    <div data-type="colloc" data-section="gen" data-day="8" data-level="b1" data-phrase="on the same page" data-meaning="Having the same understanding, expectations, or goals as another person" data-example="&quot;Let&apos;s make sure we&apos;re on the same page before the client call.&quot;" data-phonetic="/ɒn ðə seɪm peɪdʒ/" data-audio=""></div>
-    <div data-type="colloc" data-section="gen" data-day="8" data-level="b1" data-phrase="a tough conversation" data-meaning="A difficult, potentially uncomfortable discussion about something sensitive" data-example="&quot;Having a tough conversation early prevents bigger problems later.&quot;" data-phonetic="/ə tʌf ˌkɒnvəˈseɪʃən/" data-audio=""></div>
-    <div data-type="colloc" data-section="gen" data-day="8" data-level="b2" data-phrase="choose your words carefully" data-meaning="Think deliberately about what you say to avoid causing offence or misunderstanding" data-example="&quot;In a performance conversation, you really need to choose your words carefully.&quot;" data-phonetic="/tʃuːz jɔːr wɜːdz ˈkeəfəli/" data-audio=""></div>
-    <div data-type="grammar" data-section="gen" data-day="8" data-level="b1" data-phrase="&quot;partly on me&quot; vs &quot;my fault&quot;" data-meaning="&quot;My fault&quot; = direct blame. &quot;Partly on me&quot; = shared responsibility — sounds more mature and self-aware in serious conversations." data-example="&quot;We weren&apos;t aligned — and that&apos;s partly on me for not being clearer from the start.&quot;" data-phonetic="" data-audio=""></div>
-    <div data-type="power" data-section="gen" data-day="8" data-level="b1" data-phrase="Difficult Conversations Power Phrase" data-meaning="Sound mature and emotionally intelligent when opening a sensitive topic" data-example="&quot;I know this might be awkward, but I&apos;d rather be candid with you than beat around the bush — I think we need to make sure we&apos;re on the same page.&quot;" data-phonetic="" data-audio=""></div>
-    <div data-nice='["&quot;Beat around the bush&quot; — vivid image for avoiding the point; use it to describe someone who&apos;s being evasive","&quot;Bite the bullet&quot; comes from old battlefield medicine — now means doing something unpleasant but necessary","&quot;Partly on me&quot; shows maturity; it&apos;s not about blame, it&apos;s about shared ownership","&quot;Candid&quot; sounds more professional than &quot;honest&quot; in serious contexts — use it in feedback and reviews","A simple &quot;I know this might be awkward, but…&quot; softens the opening of any difficult conversation without weakening your message"]'></div>
-  </div>
-  <div data-section="biz">
-    <div data-iceq="How do you usually approach giving critical feedback to someone on your team?" data-icetip="Try: 'I try to…' / 'In my experience…' / 'The first thing I do is…'"></div>
-    <div data-dialogue="true" data-dlabel="Daniel's 1:1 with James — Monday 10am" data-dtype="biz">
-      <div data-spk="Daniel" data-spkclass="s2">James, thanks for making time. I want to <span class="hl-b">cut to the chase</span> — I think it&apos;s important we&apos;re direct with each other.</div>
-      <div data-spk="James" data-spkclass="s1">Of course. What&apos;s on your mind?</div>
-      <div data-spk="Daniel" data-spkclass="s2">I want to give you some <span class="hl-b">constructive feedback</span>. Over the last two sprints, your delivery has <span class="hl-b">fallen short</span> of the expectations we <span class="hl-b">set</span>. I don&apos;t want to ignore it — that wouldn&apos;t be fair to you.</div>
-      <div data-spk="James" data-spkclass="s1">I appreciate you <span class="hl-b">putting it on the table</span>. To be honest, I&apos;ve been struggling with the new architecture. I should have raised it sooner.</div>
-      <div data-spk="Daniel" data-spkclass="s2">I hear you — and I <span class="hl-b">take some ownership</span> here too. I should have <span class="hl-b">set clearer expectations</span> from the start. Let&apos;s work on an <span class="hl-b">action plan</span> together.</div>
-      <div data-spk="James" data-spkclass="s1">That works for me. I want to show I can <span class="hl-b">raise the bar</span>.</div>
-      <div data-spk="Daniel" data-spkclass="s2">I know you can. Let&apos;s treat this as a <span class="hl-b">growth opportunity</span> — not a punishment. I&apos;ll send over some resources and we can <span class="hl-b">check in</span> weekly.</div>
-    </div>
-    <div data-type="idiom" data-section="biz" data-day="8" data-level="b1" data-phrase="cut to the chase" data-meaning="Get directly to the important point without spending time on background or small talk" data-example="&quot;I&apos;ll cut to the chase — the project is three weeks behind and we need to talk about why.&quot;" data-phonetic="/kʌt tə ðə tʃeɪs/" data-audio=""></div>
-    <div data-type="idiom" data-section="biz" data-day="8" data-level="b2" data-phrase="put it on the table" data-meaning="Raise a topic openly and directly so it can be discussed by everyone involved" data-example="&quot;No one wanted to say it, so I put it on the table: we&apos;re over budget.&quot;" data-phonetic="/pʊt ɪt ɒn ðə ˈteɪbəl/" data-audio=""></div>
-    <div data-type="vocab" data-section="biz" data-day="8" data-level="b2" data-phrase="constructive feedback" data-meaning="Honest criticism focused on helping someone improve — specific, actionable, and respectful in tone" data-example="&quot;Good constructive feedback focuses on behaviour and outcomes, not personality.&quot;" data-phonetic="/kənˈstrʌktɪv ˈfiːdbæk/" data-audio=""></div>
-    <div data-type="vocab" data-section="biz" data-day="8" data-level="b2" data-phrase="growth opportunity" data-meaning="A professional framing of a weakness or underperformance as a chance to develop and improve" data-example="&quot;We position these conversations as growth opportunities — not warnings.&quot;" data-phonetic="/ɡrəʊθ ˌɒpəˈtjuːnɪti/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="8" data-level="b1" data-phrase="fall short (of expectations)" data-meaning="Not reach the level or standard that was expected or required" data-example="&quot;The first release fell short of what we&apos;d promised — we need to close that gap fast.&quot;" data-phonetic="/fɔːl ʃɔːt/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="8" data-level="b1" data-phrase="set clear expectations" data-meaning="Define specifically what is required from someone in terms of output, quality, or behaviour" data-example="&quot;Before onboarding anyone, I always set clear expectations about communication and delivery.&quot;" data-phonetic="/set klɪər ˌekspekˈteɪʃənz/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="8" data-level="b1" data-phrase="raise the bar" data-meaning="Set or achieve a higher standard of performance, quality, or expectations" data-example="&quot;After a string of outages, the team raised the bar on testing and peer review.&quot;" data-phonetic="/reɪz ðə bɑːr/" data-audio=""></div>
-    <div data-type="colloc" data-section="biz" data-day="8" data-level="b1" data-phrase="action plan" data-meaning="A clear, structured set of agreed steps with a timeline to resolve a problem or improve a situation" data-example="&quot;Let&apos;s leave this meeting with a concrete action plan — specific steps and an owner for each.&quot;" data-phonetic="/ˈækʃən plæn/" data-audio=""></div>
-    <div data-type="power" data-section="biz" data-day="8" data-level="b2" data-phrase="Performance Feedback Power Phrase" data-meaning="Sound fair, direct, and constructive when opening a difficult performance conversation" data-example="&quot;I want to give you some constructive feedback — over the last two sprints you&apos;ve fallen short of the expectations we set, and I&apos;d rather put it on the table now than let it go unaddressed.&quot;" data-phonetic="" data-audio=""></div>
-    <div data-nice='["&quot;Cut to the chase&quot; signals respect for the other person&apos;s time — use it to open any direct, high-stakes conversation","&quot;Constructive feedback&quot; is the gold standard phrase — never say &apos;criticism&apos; in a professional feedback context","&quot;Fall short of expectations&quot; is factual and neutral — it describes the gap without attacking the person","Saying &apos;I take some ownership here too&apos; dramatically reduces defensiveness and keeps the conversation collaborative","An &quot;action plan&quot; always needs two things: specific steps AND an owner — vague plans don&apos;t get done"]'></div>
-  </div>
-</div>
-
 </div><!-- end dataSource -->
 
 <script>
@@ -1322,7 +1269,7 @@ window.toggleDay=function(uid,btn){
 // ═══════════════════════════════════════
 function navigate(hash){
   const key=(hash||'').replace('#','').toLowerCase()||'home';
-  const pageMap={home:'home',general:'general',business:'business',flashcards:'flashcards',saved:'saved',grammar:'grammar',mine:'mine'};
+  const pageMap={home:'home',general:'general',business:'business',flashcards:'flashcards',saved:'saved',grammar:'grammar',mine:'mine',interview:'interview'};
   const pageId='page-'+(pageMap[key]||'home');
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pg=document.getElementById(pageId);
@@ -1331,6 +1278,7 @@ function navigate(hash){
   if(key==='flashcards') initDeck();
   if(key==='saved') renderSavedPage();
   if(key==='mine'){ syncProcessedWords(); renderMyWords(); }
+  if(key==='interview') ivRender();
   window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',()=>navigate(location.hash));
@@ -2038,6 +1986,247 @@ function updateSyncBtn(){
   const btn=document.getElementById('mineSyncBtn');
   if(btn) btn.style.display=getMy().length?'block':'none';
 }
+
+// ═══════════════════════════════════════
+//  INTERVIEW SIMULATOR
+// ═══════════════════════════════════════
+const IV_QUESTIONS = {
+  hr: [
+    { q: "Tell me about yourself and your journey to becoming a CTO.",
+      difficulty: "easy", topic: "Background",
+      looking: "They want a concise, confident narrative — not your full CV. They're checking if you can communicate clearly and whether your story fits the role.",
+      answer: "I'm a software engineer turned engineering leader with over [X] years of experience. I started as a backend developer, moved into team lead roles, then took on VP of Engineering before stepping into the CTO seat. My focus has always been on building scalable systems and high-performing teams. Most recently I led a team of [X] engineers, shipped [key product], and grew our platform to handle [X] users. I'm passionate about the intersection of technology strategy and people leadership.",
+      phrases: ["I'm a software engineer turned leader…", "My focus has always been…", "Most recently I…", "I'm passionate about…"],
+      mistakes: ["Don't go through every job chronologically — tell a story", "Don't open with 'I was born in…' or too much personal detail", "Don't just list titles — show progression and impact"]
+    },
+    { q: "Why are you leaving your current position?",
+      difficulty: "medium", topic: "Motivation",
+      looking: "Honesty, professionalism, and forward-looking ambition. They're screening for red flags — negativity, burnout, or being pushed out.",
+      answer: "I've learned a tremendous amount in my current role and I'm proud of what we've built. But I've reached a point where I'm looking for a new challenge — specifically, I want to work on a problem at larger scale / in a different industry / with more autonomy on the technical vision. When I heard about this opportunity, it immediately stood out because [specific reason tied to their company].",
+      phrases: ["I've learned a tremendous amount…", "I'm looking for a new challenge specifically…", "What excited me about this role is…", "I want to work on…at scale"],
+      mistakes: ["Never criticize your current employer, boss, or team", "Avoid 'the company is in trouble' or 'my boss is difficult'", "Don't say 'more money' as the primary reason"]
+    },
+    { q: "What is your biggest weakness as a CTO?",
+      difficulty: "hard", topic: "Self-awareness",
+      looking: "Genuine self-awareness and a growth mindset. They want to see you're honest, not defensive, and actively working on the weakness.",
+      answer: "Historically, I've struggled with delegating too late — I'd hold onto technical decisions longer than I should because I care deeply about quality. Over the last two years, I've been very intentional about this. I've put structured decision-making frameworks in place, I involve senior engineers earlier in the process, and I do monthly retrospectives with my leadership team specifically around delegation. It's still something I actively manage, but I've seen real improvement in both team ownership and my own bandwidth.",
+      phrases: ["Historically, I've struggled with…", "I've been very intentional about…", "I've put [specific fix] in place", "It's still something I actively manage"],
+      mistakes: ["Don't say 'I work too hard' or 'I'm a perfectionist' — it sounds fake", "Don't pick a weakness that's critical to the role", "Always follow up with concrete steps you've taken"]
+    },
+    { q: "Tell me about a time you failed. What happened and what did you learn?",
+      difficulty: "hard", topic: "Resilience",
+      looking: "Accountability, honesty, and learning agility. They want to see you take ownership without blaming others, and that you extract real lessons.",
+      answer: "In [year], I made the decision to migrate our entire infrastructure to microservices in one large push rather than incrementally. We underestimated the operational complexity — deployment issues started cascading, team morale dropped, and we delayed a major product launch by six weeks. I owned that decision fully with the leadership team. What I learned was that architectural changes need to be incremental, with clear rollback paths, and that I should have run a pilot first. Since then, every major technical change I lead follows a phased approach with defined success criteria at each stage.",
+      phrases: ["I owned that decision fully", "What I learned was…", "Since then, I always…", "We underestimated [specific thing]"],
+      mistakes: ["Don't pick a trivial failure — it looks like you're avoiding the question", "Don't blame your team, the market, or bad luck", "Don't just describe the failure — the lesson is what matters"]
+    },
+    { q: "How do you handle conflict between your engineering team and the product team?",
+      difficulty: "medium", topic: "Collaboration",
+      looking: "Maturity, communication skills, and the ability to align competing priorities without creating winners and losers.",
+      answer: "Engineering and product tension is normal and healthy — it means both sides care. My job is to create a structure where that tension leads to better decisions, not friction. I establish shared ownership of outcomes, not just outputs. In practice, this means joint sprint planning, shared OKRs, and regular 'technical debt vs. feature' sessions where we explicitly trade off together. When I see conflict escalating, I step in early — I sit both sides down, anchor the conversation to the user and business impact, and help them find common ground. The key is that neither side 'wins' — we're all optimizing for the same thing.",
+      phrases: ["Engineering and product tension is healthy…", "I create structure where tension leads to better decisions", "Anchor to user and business impact", "Neither side wins — we optimize for the same thing"],
+      mistakes: ["Don't say you always side with engineering", "Don't frame it as you being the judge — show you build systems", "Avoid vague answers like 'I facilitate communication'"]
+    },
+    { q: "Where do you see yourself in five years?",
+      difficulty: "easy", topic: "Career Goals",
+      looking: "Ambition, clarity, and alignment with the role. They want to know you're not using this as a stepping stone and that your goals make sense.",
+      answer: "In five years, I see myself having built and led a truly world-class engineering organization — one where the team is shipping with speed and quality, and technology is a genuine competitive advantage for the business. I'm interested in growing into a role where I'm also shaping product and business strategy, not just technical execution. If the company is growing, I want to grow with it — whether that means expanding the team, entering new markets, or tackling harder technical problems. I'm not focused on a specific title; I'm focused on the impact.",
+      phrases: ["I see myself having built…", "Technology as a genuine competitive advantage", "I want to grow with the company", "I'm focused on impact, not title"],
+      mistakes: ["Don't say 'CEO' if it's not realistic for the role", "Don't say you don't know — it signals lack of direction", "Don't give a non-answer like 'it depends on opportunities'"]
+    },
+    { q: "How do you stay current with technology trends as a CTO?",
+      difficulty: "easy", topic: "Learning",
+      looking: "Intellectual curiosity and a practical system for learning, not just buzzword awareness.",
+      answer: "I have a few structured habits. I read [specific sources] — Hacker News, the morning paper by TLDR, architecture blogs from Netflix, Stripe, and Cloudflare engineering teams. I allocate time every quarter to do a hands-on spike on something new — I recently spent a week building a small project with [technology] to really understand it, not just read about it. I also stay connected to my network of CTOs and engineering leaders — we have a regular peer group where we share what's working. The goal isn't to chase every trend; it's to understand signal versus noise.",
+      phrases: ["I have structured habits for this", "I allocate time every quarter for…", "The goal is signal versus noise", "I stay connected to a peer network of CTOs"],
+      mistakes: ["Don't just list buzzwords like 'AI, blockchain, cloud'", "Don't say you rely only on your team to track trends", "Show a real system, not just casual reading"]
+    },
+    { q: "Tell me about your leadership style.",
+      difficulty: "medium", topic: "Leadership",
+      looking: "Self-awareness and adaptability. They don't want a textbook answer — they want to understand how you actually show up as a leader.",
+      answer: "I'd describe my style as servant leadership with high standards. My job is to remove obstacles, give context, and create the conditions for my team to do their best work — not to have all the answers. I lead with a lot of transparency: people know where we're going, why, and what success looks like. At the same time, I hold high standards and I'm direct when something isn't working. I adapt my style to the individual — some engineers need autonomy and space; others need more check-ins and structure. The constant is that I try to make every person feel heard and respected, even when the answer is no.",
+      phrases: ["Servant leadership with high standards", "Create conditions for the team to do their best work", "I lead with transparency", "I adapt my style to the individual"],
+      mistakes: ["Don't claim to have a perfect style with no trade-offs", "Don't give a generic 'I empower people' answer", "Back it up with a specific example or decision"]
+    }
+  ],
+  tech: [
+    { q: "How would you design a system to handle 10 million concurrent users?",
+      difficulty: "hard", topic: "System Design",
+      looking: "Structured thinking, not just knowing the right buzzwords. They want to see how you break down a problem, what trade-offs you consider, and whether you understand the full stack — not just one layer.",
+      answer: "I'd start by asking clarifying questions: What's the read/write ratio? What's the latency requirement? What's the consistency model needed — strong or eventual? Then I'd think in layers:\n\n1. Load balancing — multiple geographic regions, CDN for static assets\n2. Application tier — stateless horizontal scaling with auto-scaling groups\n3. Caching — Redis for session data and hot reads, reducing database pressure significantly\n4. Database — read replicas for heavy read load, partitioning or sharding for write scale. For most systems at this scale, a combination of relational for transactional data and a NoSQL layer for high-throughput reads\n5. Async processing — message queues (Kafka or SQS) for anything that doesn't need to be synchronous\n6. Observability — distributed tracing, metrics dashboards, and alerting baked in from day one\n\nThe trade-off conversation is the important part — 10M concurrent users means operational complexity. I'd talk about where to introduce that complexity and where to keep things simple.",
+      phrases: ["I'd start by asking clarifying questions", "Think in layers", "The trade-off conversation is the important part", "Operational complexity — where to introduce it, where to stay simple"],
+      mistakes: ["Don't jump straight to a specific technology without justification", "Don't ignore the clarifying questions step — it's a signal of maturity", "Don't present one solution as 'the answer' — show trade-off awareness"]
+    },
+    { q: "Walk me through how you would approach migrating a monolith to microservices.",
+      difficulty: "hard", topic: "Architecture",
+      looking: "Pragmatism and real-world experience. Textbook microservices knowledge is not enough — they want to see you understand the cost, the risk, and the sequencing.",
+      answer: "First, I'd challenge whether we actually need microservices. It's a solution to specific problems — team scaling, independent deployment velocity, blast-radius reduction. If the monolith is working and the team is small, a modular monolith is often better.\n\nIf we decide to proceed, I follow the strangler fig pattern: identify the bounded contexts in the monolith, extract the highest-value services first (usually the ones with the most independent deployment need), build the new service alongside the old code, route traffic gradually, then retire the old code. Key principles: never do a big bang migration, keep the data layer separate from day one, invest heavily in observability before you start, and define clear service contracts with versioned APIs. The biggest risk is distributed system complexity — network failures, eventual consistency, and debugging across service boundaries.",
+      phrases: ["Challenge whether microservices is the right solution", "Strangler fig pattern", "Never do a big bang migration", "Invest heavily in observability before you start"],
+      mistakes: ["Don't present microservices as always the right answer", "Don't skip the 'why' — jumping to 'how' without 'if' is a red flag", "Don't underestimate data migration complexity"]
+    },
+    { q: "How do you make build vs. buy decisions for critical infrastructure?",
+      difficulty: "medium", topic: "Decision Making",
+      looking: "Commercial awareness, prioritization instincts, and the ability to think about total cost of ownership — not just the initial build cost.",
+      answer: "My default is buy, because building is almost always more expensive than it looks when you factor in maintenance, hiring, documentation, and opportunity cost. The cases where I lean toward build are: when it's a genuine competitive differentiator, when the vendor solutions don't meet our security or compliance requirements, or when the total cost of ownership over 3-5 years is clearly cheaper to own.\n\nMy framework is: What's the real TCO — including integration, training, and lock-in risk? Is this a core competency or commodity? If we build, do we have the talent to maintain it at quality? And critically — what's the opportunity cost of building it ourselves instead of shipping product? I've overruled engineers who wanted to build custom auth, custom observability, custom messaging — not because they couldn't, but because we needed to stay focused.",
+      phrases: ["My default is buy", "Factor in maintenance, hiring, documentation, opportunity cost", "Total cost of ownership over 3-5 years", "Core competency vs. commodity"],
+      mistakes: ["Don't say 'it depends' without a framework", "Don't bias toward 'build' — it often signals not understanding true cost", "Don't ignore lock-in risk when arguing for buy"]
+    },
+    { q: "How do you approach technical debt?",
+      difficulty: "medium", topic: "Engineering Culture",
+      looking: "Balance. They want someone who doesn't ignore debt but also doesn't use it as an excuse to slow product delivery. Strategic thinking about when to pay it down.",
+      answer: "Technical debt isn't inherently bad — some of it is the right trade-off at the time. My approach starts with making it visible. We maintain a living tech debt register, categorized by impact and risk: things that are slowing the team down significantly, things that are a security or reliability risk, and things that are simply suboptimal but manageable.\n\nI allocate a fixed percentage of every sprint — typically 20% — for debt reduction, so it doesn't get indefinitely deferred. For major debt items, I write a proper proposal with business impact: 'This is costing us X hours per sprint and is a blocker for Y roadmap item' — that language resonates with non-technical stakeholders. The goal is never zero debt — it's to keep it at a level where it doesn't limit your velocity or reliability.",
+      phrases: ["Make it visible — a living tech debt register", "Fixed percentage of every sprint — typically 20%", "Frame it in business impact language", "Goal is not zero debt — it's manageable debt"],
+      mistakes: ["Don't say you 'pay it down when there's time' — there's never time", "Don't frame it as purely technical — always connect to business impact", "Don't treat all debt equally — prioritization is the skill"]
+    },
+    { q: "How do you handle a major production outage?",
+      difficulty: "hard", topic: "Incident Response",
+      looking: "Composure, process, and communication skills under pressure. They want a CTO who has a clear playbook, not one who panics or disappears.",
+      answer: "I follow a clear incident response structure. The moment I'm alerted, I do three things simultaneously: assign a clear incident commander so there's one decision-maker, open a dedicated comms channel so all information flows in one place, and notify stakeholders with an initial impact statement — even if I don't have the full picture yet. Then I stay out of the way technically unless I'm needed — micromanaging during an incident slows engineers down.\n\nOnce resolved, I run a blameless post-mortem within 48 hours. The output is concrete: what broke, what the timeline was, what we're changing in systems, processes, and monitoring. I publish the post-mortem internally and often externally if customers were impacted — transparency builds more trust than silence. The measure of a team isn't whether they have incidents; it's how fast they detect, respond, and learn.",
+      phrases: ["Assign a clear incident commander", "One decision-maker, one comms channel", "Stay out of the way technically", "Blameless post-mortem within 48 hours"],
+      mistakes: ["Don't describe a chaotic, hero-based response", "Don't skip the post-mortem step", "Don't present yourself as the one who solves everything alone"]
+    },
+    { q: "What is your philosophy on engineering team structure and scaling?",
+      difficulty: "medium", topic: "Team Design",
+      looking: "Knowledge of Conway's Law, team topology thinking, and real experience scaling teams — not just theory.",
+      answer: "I think about team structure through the lens of Conway's Law — your architecture will mirror your communication structure. So I design teams around products and capabilities, not technical layers. Two-pizza teams with clear ownership, minimal external dependencies, and the ability to ship end-to-end are the goal.\n\nAs teams scale, the hardest part isn't the technology — it's maintaining speed and ownership culture. I introduce platform engineering early, to abstract shared infrastructure away from product teams. I keep management spans of control at 6-8 direct reports maximum. And I'm aggressive about breaking up teams that have too many dependencies — a team blocked by another team every sprint isn't really autonomous. The principle is: optimize for cognitive load and deployment independence.",
+      phrases: ["Conway's Law — architecture mirrors communication structure", "Two-pizza teams with clear ownership", "Platform engineering to abstract shared infrastructure", "Optimize for cognitive load and deployment independence"],
+      mistakes: ["Don't just describe a flat org with no structure", "Don't ignore the human side — motivation and career growth matter", "Avoid cookie-cutter answers like 'agile squads' without context"]
+    },
+    { q: "How do you ensure security is built into your engineering process, not bolted on?",
+      difficulty: "medium", topic: "Security",
+      looking: "A DevSecOps mindset and practical experience embedding security into the SDLC, not just compliance checkbox-ticking.",
+      answer: "Security has to be a shared responsibility, not a separate gate. In practice, this means: threat modeling as part of design reviews for any new system, automated SAST and dependency scanning in the CI pipeline so vulnerabilities surface before code is merged, and a clear policy on secrets management — no credentials in code, ever, enforced by tooling. We run regular internal pen tests and bug bounty programs. I also run tabletop security exercises with the team — simulated breach scenarios — so the team has muscle memory before a real incident. The cultural piece is equally important: I reward engineers who surface security issues early, not punish them.",
+      phrases: ["Shared responsibility, not a separate gate", "Threat modeling as part of design reviews", "SAST and dependency scanning in CI", "Reward engineers who surface issues early"],
+      mistakes: ["Don't treat security as a compliance exercise", "Don't describe it as 'the security team's job'", "Avoid talking only about perimeter security — modern threats are mostly inside the perimeter"]
+    },
+    { q: "How do you evaluate whether to adopt a new technology or framework?",
+      difficulty: "medium", topic: "Technology Strategy",
+      looking: "A structured decision-making process and the ability to separate hype from value. They don't want a CTO who chases trends.",
+      answer: "I use a version of the ThoughtWorks Technology Radar mindset — everything goes through a cycle: Assess, Trial, Adopt, Hold. When something new comes up, I don't dismiss it or adopt it immediately. I ask: Does it solve a real problem we have today? What's the maturity level — is there production evidence at scale? What's the talent market like — can we hire for it? What does migration look like if it doesn't work out?\n\nFor promising technologies, I authorize a time-boxed spike — a small team, two to four weeks, building something real with it. The spike ends with a written assessment. If it passes, we move to a controlled pilot in a non-critical system. Only after real production experience do we consider broader adoption. This prevents both premature adoption and the opposite — being too slow to adopt things that genuinely improve our capability.",
+      phrases: ["Assess, Trial, Adopt, Hold cycle", "Does it solve a real problem we have today?", "Time-boxed spike with a written assessment", "Real production experience before broader adoption"],
+      mistakes: ["Don't say you follow your team's enthusiasm", "Don't say you only adopt things once they're industry standard — that's too slow", "Avoid letting one charismatic engineer push a stack change without process"]
+    }
+  ],
+  manager: [
+    { q: "How do you build and retain a high-performing engineering team?",
+      difficulty: "hard", topic: "People Leadership",
+      looking: "A clear and experienced philosophy on talent — hiring, development, culture, and retention. They want someone who treats people as the product.",
+      answer: "Retention starts at hiring — I'm selective about culture fit alongside technical ability, because a high bar on both is cheaper than managing a misfit. Once people are in, I focus on three things: clarity, growth, and belonging. Clarity means everyone knows what they're working toward and why it matters. Growth means I have explicit career conversations every month — not just at review time — and I remove obstacles to their development. Belonging means psychological safety: people speak up, push back, and share bad news early.\n\nFor retention specifically, I watch for early signals — disengagement, drop in output, quiet quitting. When I see them, I have a direct conversation. The biggest retention lever I've found is giving people real ownership and visibility — engineers stay when they feel like they're building something that matters and that their contribution is seen.",
+      phrases: ["Retention starts at hiring", "Clarity, growth, and belonging", "Real ownership and visibility", "Explicit career conversations every month"],
+      mistakes: ["Don't focus only on compensation — it's rarely the primary driver", "Don't describe a passive approach — show active investment in people", "Don't confuse retaining everyone with retaining the right people"]
+    },
+    { q: "Tell me about a time you had to let someone go. How did you handle it?",
+      difficulty: "hard", topic: "Difficult Decisions",
+      looking: "Maturity, fairness, compassion, and decisiveness. They want to see you can make hard calls without being cruel, and without avoiding the issue.",
+      answer: "I had a senior engineer who was technically strong but was consistently disruptive in team settings — dismissive of junior engineers, resistant to feedback, and creating a culture of fear in code reviews. I gave clear, direct feedback twice with specific examples and agreed improvement areas. I involved HR to ensure the process was fair and documented. After six weeks with no meaningful change, I made the decision to let them go.\n\nThe conversation itself was direct and respectful — I didn't soften it to the point of confusion. I explained what hadn't changed and why the decision was final. I also communicated to the team without oversharing — I said the person had left and we wished them well. What I learned: I should have acted faster. Tolerating the behaviour for too long damaged the team's trust in me as a protector of the culture.",
+      phrases: ["Clear, direct feedback with specific examples", "Involved HR — fair and documented process", "The conversation was direct and respectful", "I should have acted faster"],
+      mistakes: ["Don't say you've never had to do this — it's not credible at CTO level", "Don't describe a vague or cowardly process", "Don't throw the person under the bus — stay professional even in hindsight"]
+    },
+    { q: "How do you align your engineering team with business goals?",
+      difficulty: "medium", topic: "Strategy",
+      looking: "Business acumen and the ability to translate between technical and commercial language. They want a CTO who is a business partner, not just a tech department head.",
+      answer: "The starting point is making sure I'm in the room where business strategy is made — not just implementing decisions handed down. I translate business goals into engineering OKRs with clear metrics: not 'improve performance' but 'reduce p99 latency to under 200ms by Q3 to unblock the enterprise sales tier.' Then I make those OKRs visible to the whole team with context — why it matters to the business, how we'll measure it, and what 'done' looks like.\n\nI run quarterly alignment sessions where I bring business stakeholders to explain their priorities directly to the engineering team — cutting out my interpretation. Engineers who understand the why make better technical trade-offs. And I hold a monthly CTO review with product and commercial leads to check alignment, surface blockers, and recalibrate if priorities have shifted.",
+      phrases: ["In the room where business strategy is made", "Translate business goals into engineering OKRs with clear metrics", "Engineers who understand the why make better trade-offs", "Monthly CTO review to check alignment"],
+      mistakes: ["Don't describe a one-way flow — strategy down, execution up", "Don't use only technical metrics — always connect to business outcomes", "Don't skip the cultural piece — alignment is about shared understanding, not just OKRs"]
+    },
+    { q: "How do you manage an underperforming engineer?",
+      difficulty: "medium", topic: "Performance",
+      looking: "A fair, structured process that balances support with accountability. They want someone who doesn't ignore the problem or immediately move to fire.",
+      answer: "I start with curiosity, not judgment. Underperformance often has an underlying cause — personal circumstances, unclear expectations, the wrong role, or inadequate support. My first step is a direct private conversation: 'I've noticed X, I want to understand what's going on from your side.' Sometimes that conversation surfaces a fixable root cause.\n\nIf it's a performance issue, I move to a structured improvement plan — not a bureaucratic PIP that's a paper trail to termination, but a genuine plan with specific goals, support resources, and a 30/60/90 day check-in cadence. I'm honest about the stakes: 'I want to support you, and I also need to be transparent that the current level isn't working.' I involve HR as a partner from the start. If there's genuine effort and progress, I extend support. If there's no change after real support, I act decisively — waiting too long is unfair to the person and to the team.",
+      phrases: ["Start with curiosity, not judgment", "Understand the root cause first", "Structured improvement plan — genuine, not a paper trail", "Honest about the stakes from the start"],
+      mistakes: ["Don't describe immediate escalation to HR as the first step", "Don't pretend you've never had this situation", "Don't describe a PIP that's clearly just documentation for termination"]
+    },
+    { q: "How do you communicate with the board and non-technical stakeholders?",
+      difficulty: "medium", topic: "Communication",
+      looking: "Business language fluency and the ability to make technical decisions legible to non-technical audiences without being condescending.",
+      answer: "The key is speaking their language, not asking them to learn mine. For board presentations, I translate technical initiatives into business impact: risk reduction, revenue enablement, cost efficiency, or competitive advantage. I never lead with architecture diagrams or technology choices — I lead with outcomes and trade-offs.\n\nFor example, when I needed to make the case for a major infrastructure investment, I framed it as: 'Our current system limits us to X transactions per second. Our growth trajectory hits that ceiling in Q2. The investment protects $Y in annual revenue and unblocks the enterprise market.' That's a business decision, not a technical one.\n\nI also know what not to say — I don't burden the board with implementation details they can't act on. My rule: if they can't do anything with the information, it doesn't belong in a board update.",
+      phrases: ["Speak their language, not ask them to learn mine", "Lead with outcomes and trade-offs, not architecture", "Frame as: risk, revenue, cost, or competitive advantage", "If they can't act on it, it doesn't belong in the update"],
+      mistakes: ["Don't use technical acronyms without explaining them", "Don't over-explain implementation details", "Don't underestimate the board — they can handle complexity if it's business-framed"]
+    },
+    { q: "How do you set priorities when everything seems urgent?",
+      difficulty: "medium", topic: "Prioritization",
+      looking: "Decisiveness, a clear mental model for prioritization, and the ability to say no without creating conflict.",
+      answer: "When everything is urgent, usually nothing is. My first move is to force a stack rank — I bring stakeholders together and make them explicitly order the items, not just mark everything as P1. The conversation that happens in the room is often more valuable than the list itself.\n\nMy decision framework: What is the cost of delay? What is the blast radius if this isn't done? What's the dependency chain — what is this blocking? And critically: what is the opportunity cost of doing this instead of something else? I'm also explicit about what we're choosing not to do, not just what we're doing — saying no clearly, with reasoning, builds more trust than pretending everything will get done.\n\nFor recurring prioritization, I use a simple rule: protect the roadmap. If more than 30% of sprint capacity is going to unplanned work, that's a planning or reliability problem — not a prioritization problem.",
+      phrases: ["When everything is urgent, usually nothing is", "Force a stack rank", "Cost of delay, blast radius, dependency chain", "Be explicit about what we're not doing"],
+      mistakes: ["Don't say you rely purely on business stakeholders to decide", "Don't describe a process that avoids trade-offs", "Don't skip the 'no' — saying no clearly is a leadership skill"]
+    },
+    { q: "Tell me about a time you had to make an unpopular decision.",
+      difficulty: "hard", topic: "Leadership Under Pressure",
+      looking: "Confidence, empathy, and the ability to hold a position under pressure while remaining open to new information. Backbone matters at CTO level.",
+      answer: "When we were facing a funding crunch, I made the decision to stop all new feature development for six weeks and focus entirely on reliability and technical debt. The product and commercial teams pushed back hard — we had commitments to customers. I held the decision because the data was clear: our system reliability was at a point where new features would make things worse, not better.\n\nI communicated the reasoning thoroughly — to the team, to the board, to customers. I was direct: 'We made commitments we shouldn't have made given the state of our infrastructure. The right thing to do is fix the foundation.' The outcome was a reduction in incidents by 70% and an acceleration of feature velocity the following quarter. Some people were still frustrated with me. That's okay — I'd make the same call again.",
+      phrases: ["I held the decision because the data was clear", "I communicated the reasoning thoroughly", "I was direct about why we were doing this", "I'd make the same call again"],
+      mistakes: ["Don't pick a low-stakes decision as your example", "Don't describe caving under pressure as 'listening to feedback'", "Don't make it sound like the decision was obvious — show the real tension"]
+    },
+    { q: "How do you approach hiring senior engineers and engineering leaders?",
+      difficulty: "medium", topic: "Hiring",
+      looking: "A clear, consistent hiring philosophy and experience with the full cycle — sourcing, assessment, closing, and onboarding.",
+      answer: "For senior hires, the most important thing is clarity on what you actually need — not a generic 'strong engineer' spec. I write a success profile before I write a job description: in 12 months, what will this person have accomplished? Then I build the interview process backward from that.\n\nFor technical assessment, I avoid competitive LeetCode-style questions for senior roles — they test preparation, not judgment. I use system design discussions, past decision deep-dives, and a real work sample or take-home that mirrors the actual job. For leadership roles, I spend most of the interview understanding how they've handled ambiguity, built teams, and made decisions with incomplete information.\n\nThe close is often underestimated. I personally call every senior candidate I want to hire and have a real conversation about their motivations, concerns, and what would make this the right move. The best candidates have options — they choose where they feel valued and challenged.",
+      phrases: ["Write a success profile before a job description", "Build the interview process backward from outcomes", "Avoid LeetCode for senior roles — test judgment, not preparation", "The close is underestimated — personally call every senior candidate"],
+      mistakes: ["Don't describe a purely technical filter process for leadership roles", "Don't rely only on inbound applications — sourcing is active at senior level", "Don't skip the candidate experience — the best people will judge your process"]
+    }
+  ]
+};
+
+let ivState = { mode: 'hr', idx: 0, seen: new Set() };
+
+function ivRender(){
+  const qs = IV_QUESTIONS[ivState.mode];
+  const q = qs[ivState.idx];
+  ivState.seen.add(ivState.idx);
+  document.getElementById('ivQuestion').textContent = q.q;
+  document.getElementById('ivCounter').textContent = `Question ${ivState.idx+1} of ${qs.length}`;
+  document.getElementById('ivDifficulty').textContent = q.difficulty.charAt(0).toUpperCase()+q.difficulty.slice(1);
+  document.getElementById('ivDifficulty').className = 'iv-difficulty ' + q.difficulty;
+  document.getElementById('ivTopic').textContent = q.topic;
+  document.getElementById('ivLookingFor').textContent = q.looking;
+  document.getElementById('ivModelAnswer').textContent = q.answer;
+  // Phrases
+  const pc = document.getElementById('ivPhrases');
+  pc.innerHTML = q.phrases.map(p=>`<span class="iv-phrase-chip">${p}</span>`).join('');
+  // Mistakes
+  document.getElementById('ivMistakes').innerHTML = '<ul style="margin:0;padding-left:18px">'+q.mistakes.map(m=>`<li>${m}</li>`).join('')+'</ul>';
+  // Reset state
+  document.getElementById('ivAnswerBox').style.display='none';
+  document.getElementById('ivRevealBtn').style.display='block';
+  document.getElementById('ivUserAnswer').value='';
+  // Nav buttons
+  document.getElementById('ivPrevBtn').disabled = ivState.idx===0;
+  document.getElementById('ivNextBtn').disabled = ivState.idx===qs.length-1;
+  // Dots
+  const dots = document.getElementById('ivDots');
+  dots.innerHTML = qs.map((_,i)=>`<div class="iv-dot${i===ivState.idx?' active':ivState.seen.has(i)?' seen':''}" onclick="ivGoto(${i})"></div>`).join('');
+}
+
+window.ivReveal = function(){
+  document.getElementById('ivAnswerBox').style.display='block';
+  document.getElementById('ivRevealBtn').style.display='none';
+  document.getElementById('ivAnswerBox').scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+
+window.ivNav = function(dir){
+  const qs = IV_QUESTIONS[ivState.mode];
+  const next = ivState.idx + dir;
+  if(next<0||next>=qs.length) return;
+  ivState.idx = next;
+  ivRender();
+  document.getElementById('ivCard').scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+window.ivGoto = function(i){
+  ivState.idx = i;
+  ivRender();
+};
+
+document.querySelectorAll('.iv-mode-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.iv-mode-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    ivState.mode = btn.dataset.mode;
+    ivState.idx = 0;
+    ivState.seen = new Set();
+    ivRender();
+  });
+});
 
 // Flashcard filter buttons
 document.getElementById('page-flashcards').addEventListener('click',e=>{
