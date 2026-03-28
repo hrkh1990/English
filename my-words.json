@@ -1,16 +1,16 @@
 [
   {
-    "id": "mine_1774687298764",
-    "phrase": "trackback to",
-    "meaning": "",
-    "example": "",
+    "id": "mine_1774687687707",
+    "phrase": "trackback",
+    "meaning": "trace origin / root cause",
+    "example": "Let’s track back and find where the error started.",
     "context": "",
-    "type": "idiom",
+    "type": "vocab",
     "section": "auto",
-    "level": "b1",
+    "level": "c1",
     "phonetic": "",
-    "audioUrl": "",
-    "status": "pending",
+    "audioUrl": "https://api.dictionaryapi.dev/media/pronunciations/en/trackback-uk.mp3",
+    "status": "processed",
     "addedAt": "Mar 28, 2026"
   }
 ]
